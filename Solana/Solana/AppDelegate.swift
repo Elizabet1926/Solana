@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  Solana
 //
-//  Created by Charles on 2022/9/15.
+//  Created by Elizabet on 2022/9/15.
 //
 
 import UIKit
