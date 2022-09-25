@@ -10,7 +10,7 @@ import SafariServices
 import SnapKit
 import UIKit
   
-private let margin: CGFloat = 20.0
+let margin: CGFloat = 20.0
 
 enum TransferType: String, CaseIterable {
     case sendSOL

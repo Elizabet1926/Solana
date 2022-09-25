@@ -16,7 +16,6 @@ public enum SPLToken: String, CaseIterable {
 }
 
 public class SolanaWeb: NSObject {
-    
     var webView: WKWebView!
     var bridge: SOLWebViewJavascriptBridge!
     var isGenerateSolanaWebInstanceSuccess: Bool = false
@@ -30,16 +29,16 @@ public class SolanaWeb: NSObject {
         self.webView.configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
         self.bridge = SOLWebViewJavascriptBridge(webView: self.webView)
     }
-    
+
     deinit {
         print("\(type(of: self)) release")
     }
 
-    func setup(showLog: Bool = true,onCompleted: ((Bool) -> Void)? = nil){
+    func setup(showLog: Bool = true, onCompleted: ((Bool) -> Void)? = nil) {
         self.onCompleted = onCompleted
         self.showLog = showLog
         if showLog {
-            bridge.consolePipeClosure = { water in
+            self.bridge.consolePipeClosure = { water in
                 guard let jsConsoleLog = water else {
                     print("Javascript console.log give native is nil!")
                     return
@@ -47,16 +46,16 @@ public class SolanaWeb: NSObject {
                 print(jsConsoleLog)
             }
         }
-        bridge.register(handlerName: "generateSolanaWeb3") { [weak self] (parameters, callback) in
-            guard let self = self else {return}
+        self.bridge.register(handlerName: "generateSolanaWeb3") { [weak self] _, callback in
+            guard let self = self else { return }
             self.isGenerateSolanaWebInstanceSuccess = true
             self.onCompleted?(true)
-            let data = ["key":"value"]
+            let data = ["key": "value"]
             callback?(data)
         }
-        let htmlSource = loadBundleResource(bundleName: "SolanaWeb", sourceName: "/index.html")
-        let url = URL.init(fileURLWithPath: htmlSource)
-        webView.loadFileURL(url, allowingReadAccessTo: url)
+        let htmlSource = self.loadBundleResource(bundleName: "SolanaWeb", sourceName: "/index.html")
+        let url = URL(fileURLWithPath: htmlSource)
+        self.webView.loadFileURL(url, allowingReadAccessTo: url)
     }
 
     func loadBundleResource(bundleName: String, sourceName: String) -> String {
@@ -66,19 +65,54 @@ public class SolanaWeb: NSObject {
         }
         return bundleResourcePath! + sourceName
     }
-    
-    func solanaTransfer(privateKey:String,
-                        toAddress:String,
-                        amount:String,
-                        endpoint:String = SolanaMainNet,
-                        onCompleted: ((Bool, String) -> Void)? = nil) {
-     
-        let amount = Int64(doubleValue(string: amount) * pow(10,9))
-        let params:[String:Any] = ["toPublicKey":toAddress,
-                                      "amount":amount,
-                                      "endpoint":endpoint,
-                                      "secretKey":privateKey]
-        bridge.call(handlerName: "solanaMainTransfer", data: params){ response in
+
+    public func getSOLBalance(address: String, endpoint: String = SolanaMainNet, onCompleted: ((Bool, String) -> Void)? = nil) {
+        let params: [String: String] = ["address": address, "endpoint": endpoint]
+        self.bridge.call(handlerName: "getSOLBalance", data: params) { response in
+            if self.showLog { print("response = \(String(describing: response))") }
+            guard let temp = response as? [String: Any], let state = temp["result"] as? Bool else {
+                onCompleted?(false, "error")
+                return
+            }
+            if let balance = temp["balance"] as? String {
+                onCompleted?(state, balance)
+            }
+        }
+    }
+
+    public func getSPLTokenBalance(address: String,
+                                   SPLTokenAddress: String = SPLToken.USDT.rawValue,
+                                   decimalPoints: Double = 6.0,
+                                   endpoint: String = SolanaMainNet,
+                                   onCompleted: ((Bool, String) -> Void)? = nil) {
+        let params: [String: Any] = ["address": address,
+                                        "endpoint": endpoint,
+                                        "SPLTokenAddress": SPLTokenAddress,
+                                        "decimalPoints": decimalPoints]
+        self.bridge.call(handlerName: "getSPLTokenBalance", data: params) { response in
+            if self.showLog { print("response = \(String(describing: response))") }
+            guard let temp = response as? [String: Any], let state = temp["result"] as? Bool else {
+                onCompleted?(false, "error")
+                return
+            }
+            if let balance = temp["balance"] as? String {
+                onCompleted?(state, balance)
+            }
+        }
+    }
+
+    public func solanaTransfer(privateKey: String,
+                               toAddress: String,
+                               amount: String,
+                               endpoint: String = SolanaMainNet,
+                               onCompleted: ((Bool, String) -> Void)? = nil)
+    {
+        let amount = Int64(doubleValue(string: amount) * pow(10, 9))
+        let params: [String: Any] = ["toPublicKey": toAddress,
+                                     "amount": amount,
+                                     "endpoint": endpoint,
+                                     "secretKey": privateKey]
+        self.bridge.call(handlerName: "solanaMainTransfer", data: params) { response in
             guard let temp = response as? [String: Any], let state = temp["result"] as? Bool, let txid = temp["txid"] as? String else {
                 onCompleted?(false, "error")
                 return
@@ -87,21 +121,22 @@ public class SolanaWeb: NSObject {
         }
     }
 
-    func solanaTokenTransfer(privateKey:String,
-                             toAddress:String,
-                             mintAuthority:String = SPLToken.USDT.rawValue,
-                             amount:String,
-                             decimalPoints:Double = 6,
-                             endpoint:String = SolanaMainNet,
-                             onCompleted: ((Bool, String) -> Void)? = nil) {
-        let number = Int64(doubleValue(string: amount) * pow(10,decimalPoints))
-        let params:[String:Any] = [ "mintAuthority":mintAuthority,
-                                     "toPublicKey":toAddress,
-                                     "amount":number,
-                                     "endpoint":endpoint,
-                                     "decimals":decimalPoints,
-                                     "secretKey":privateKey]
-        bridge.call(handlerName: "solanaTokenTransfer", data: params) { response in
+    public func solanaTokenTransfer(privateKey: String,
+                                    toAddress: String,
+                                    mintAuthority: String = SPLToken.USDT.rawValue,
+                                    amount: String,
+                                    decimalPoints: Double = 6,
+                                    endpoint: String = SolanaMainNet,
+                                    onCompleted: ((Bool, String) -> Void)? = nil)
+    {
+        let number = Int64(doubleValue(string: amount) * pow(10, decimalPoints))
+        let params: [String: Any] = ["mintAuthority": mintAuthority,
+                                     "toPublicKey": toAddress,
+                                     "amount": number,
+                                     "endpoint": endpoint,
+                                     "decimals": decimalPoints,
+                                     "secretKey": privateKey]
+        self.bridge.call(handlerName: "solanaTokenTransfer", data: params) { response in
             guard let temp = response as? [String: Any], let state = temp["result"] as? Bool, let txid = temp["txid"] as? String else {
                 onCompleted?(false, "error")
                 return
@@ -112,28 +147,32 @@ public class SolanaWeb: NSObject {
 }
 
 extension SolanaWeb: WKNavigationDelegate {
-    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error){
+    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         if self.showLog {
             print("WKWebView didFail---->")
             print(error)
         }
     }
-    public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error){
+
+    public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         if self.showLog {
             print("WKWebView didFailProvisionalNavigation---->")
             print(error)
         }
     }
+
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if self.showLog {
             print("WKWebView didFinish---->")
         }
     }
+
     public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         if self.showLog {
             print("WKWebView didStartProvisionalNavigation---->")
         }
     }
+
     public func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         if self.showLog {
             print("WKWebView didReceive  challenge---->")
@@ -144,6 +183,7 @@ extension SolanaWeb: WKNavigationDelegate {
             completionHandler(.performDefaultHandling, nil)
         }
     }
+
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if self.showLog {
             print("WKWebView didReceive  decidePolicyFor---->")
@@ -153,7 +193,7 @@ extension SolanaWeb: WKNavigationDelegate {
 }
 
 extension SolanaWeb {
-    private func doubleValue (string: String)->Double {
+    private func doubleValue(string: String) -> Double {
         let decima = NSDecimalNumber(string: string.count == 0 ? "0" : string)
         let doubleValue = Double(truncating: decima as NSNumber)
         return doubleValue

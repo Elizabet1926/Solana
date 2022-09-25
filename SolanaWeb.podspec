@@ -15,9 +15,9 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "TronWeb"
-  s.version      = "1.0.2"
-  s.summary      = "TRX Transfer/ TRC20 Transfer/ Get TRX Balance/ TRC20 Balance with Swift."
+  s.name         = "SolanaWeb"
+  s.version      = "1.0.0"
+  s.summary      = "Solana SOL/SPLToken Transfer with Swift."
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -25,11 +25,11 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-                    English:TRX Transfer/ TRC20 Transfer/ Get TRX Balance/ TRC20 Balance with Swift.n.
-                    Chinese :很方便的进行波场TRX 转账、TRC20代币转账，查询TRX 余额、TRC20代币余额等等.
+                    English: Solana SOL/SPLToken Transfer with Swift..
+                    Chinese :Solana SOL/SPLToken 转账.
                    DESC
 
-  s.homepage     = "https://github.com/james19870606/TronWeb"
+  s.homepage     = "https://github.com/Elizabet1926/Solana"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
 
 
@@ -54,7 +54,7 @@ Pod::Spec.new do |s|
   #  profile URL.
   #
 
-  s.author             = { "james19870606" => "james19870606@gmail.com" }
+  s.author             = { "Elizabeth" => "elizabethalexandramarrry@gmail.com" }
 
   # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -78,7 +78,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/james19870606/TronWeb.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/Elizabet1926/Solana.git", :tag => "#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -89,8 +89,8 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = 'TronWeb'
-  s.resource     = 'TronWeb/TronWeb.bundle'
+  s.source_files  = 'SolanaWeb'
+  s.resource     = 'SolanaWeb/SolanaWeb.bundle'
   # s.exclude_files = "Classes/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"
