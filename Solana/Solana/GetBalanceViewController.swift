@@ -2,7 +2,7 @@
 //  GetBalanceViewController.swift
 //  Solana
 //
-//  Created by Charles on 2022/9/26.
+//  Created by Elizabet on 2022/9/26.
 //
 
 import Foundation

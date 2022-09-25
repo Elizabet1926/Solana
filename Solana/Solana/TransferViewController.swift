@@ -2,7 +2,7 @@
 //  TransferViewController.swift
 //  Solana
 //
-//  Created by Charles on 2022/9/16.
+//  Created by Elizabet on 2022/9/16.
 //
 
 import Foundation
