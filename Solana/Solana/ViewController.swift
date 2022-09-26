@@ -9,44 +9,19 @@ import UIKit
 import SnapKit
 class ViewController: UIViewController {
     
-    lazy var getSOLBalanceBtn: UIButton = {
-        let btn = UIButton()
-        btn.setTitle("getSOLBalance", for: .normal)
-        btn.backgroundColor = .red
-        btn.addTarget(self, action: #selector(getSOLBalance), for: .touchUpInside)
-        btn.layer.cornerRadius = 5.0
-        btn.layer.masksToBounds = true
-        return btn
-    }()
-    
-    lazy var getSPLTokenBalanceBtn: UIButton = {
-        let btn = UIButton()
-        btn.setTitle("getSPLTokenBalance", for: .normal)
-        btn.backgroundColor = .red
-        btn.addTarget(self, action: #selector(getSPLTokenBalance), for: .touchUpInside)
-        btn.layer.cornerRadius = 5.0
-        btn.layer.masksToBounds = true
-        return btn
-    }()
-    
-    lazy var sendSOLBtn: UIButton = {
-        let btn = UIButton()
-        btn.setTitle("sendSOL", for: .normal)
-        btn.backgroundColor = .red
-        btn.addTarget(self, action: #selector(sendSOL), for: .touchUpInside)
-        btn.layer.cornerRadius = 5.0
-        btn.layer.masksToBounds = true
-        return btn
-    }()
-    
-    lazy var sendSPLTokenBtn: UIButton = {
-        let btn = UIButton()
-        btn.setTitle("sendSPLToken", for: .normal)
-        btn.backgroundColor = .red
-        btn.addTarget(self, action: #selector(sendSPLToken), for: .touchUpInside)
-        btn.layer.cornerRadius = 5.0
-        btn.layer.masksToBounds = true
-        return btn
+    let operationTypes = ["getSOLBalance",
+                          "getSPLTokenBalance",
+                          "getTokenAccountsByOwner",
+                          "sendSOL",
+                          "sendSPLToken"];
+  
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .grouped)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "DefaultCell")
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
     }()
     
     override func viewDidLoad() {
@@ -56,33 +31,9 @@ class ViewController: UIViewController {
 
     func setupUI() {
         title = "HomePage"
-        view.addSubview(getSOLBalanceBtn)
-        view.addSubview(getSPLTokenBalanceBtn)
-        view.addSubview(sendSOLBtn)
-        view.addSubview(sendSPLTokenBtn)
-        getSOLBalanceBtn.snp.makeConstraints { make in
-            make.left.equalTo(20)
-            make.right.equalTo(-20)
-            make.height.equalTo(44)
-            make.top.equalTo(150)
-        }
-        getSPLTokenBalanceBtn.snp.makeConstraints { make in
-            make.left.equalTo(20)
-            make.right.equalTo(-20)
-            make.height.equalTo(44)
-            make.top.equalTo(getSOLBalanceBtn.snp.bottom).offset(100)
-        }
-        sendSOLBtn.snp.makeConstraints { make in
-            make.left.equalTo(20)
-            make.right.equalTo(-20)
-            make.height.equalTo(44)
-            make.top.equalTo(getSPLTokenBalanceBtn.snp.bottom).offset(100)
-        }
-        sendSPLTokenBtn.snp.makeConstraints { make in
-            make.left.equalTo(20)
-            make.right.equalTo(-20)
-            make.height.equalTo(44)
-            make.top.equalTo(sendSOLBtn.snp.bottom).offset(100)
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
     @objc func sendSOL() {
@@ -106,6 +57,29 @@ class ViewController: UIViewController {
         vc.getBalanceType = .getSPLTokenBalance
         navigationController?.pushViewController(vc, animated: true)
     }
+    @objc func getTokenAccountsByOwner() {
+        let vc = GetTokenAccountsByOwner()
+        navigationController?.pushViewController(vc, animated: true)
+    }
     
 }
+extension ViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let title = operationTypes[indexPath.row]
+        let sel = NSSelectorFromString(title)
+        self.perform(sel)
+    }
+}
 
+extension ViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return operationTypes.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DefaultCell", for: indexPath)
+        let title = operationTypes[indexPath.row]
+        cell.textLabel?.text = title
+        return cell
+    }
+}

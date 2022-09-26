@@ -108,18 +108,18 @@ class GetBalanceViewController: UIViewController {
             guard let self = self else { return }
             self.getBalanceBtn.isEnabled = true
             if state {
-                let title = self.getBalanceType == .getSOLBalance ? "SOL餘額：" :"SPLToken餘額："
+                let title = self.getBalanceType == .getSOLBalance ? "SOL餘額：" : "SPLToken餘額："
                 self.balanceLabel.text = title + balance
             } else {}
         }
     }
 
     func getSPLTokenBalance(_ address: String, _ splTokenAddress: String) {
-        solanaWeb.getSPLTokenBalance(address: address,SPLTokenAddress: splTokenAddress) { [weak self] state, balance in
+        solanaWeb.getSPLTokenBalance(address: address, SPLTokenAddress: splTokenAddress) { [weak self] state, balance in
             guard let self = self else { return }
             self.getBalanceBtn.isEnabled = true
             if state {
-                let title = self.getBalanceType == .getSOLBalance ? "SOL餘額：" :"SPLToken餘額："
+                let title = self.getBalanceType == .getSOLBalance ? "SOL餘額：" : "SPLToken餘額："
                 self.balanceLabel.text = title + balance
             } else {}
         }

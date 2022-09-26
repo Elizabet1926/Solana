@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7E6BAA7BD57C884101AE143E /* Pods_Solana.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C49C0EC84036AF7277AC6DB9 /* Pods_Solana.framework */; };
 		EF37893928E0B6EB0079021B /* GetBalanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF37893828E0B6EB0079021B /* GetBalanceViewController.swift */; };
+		EF4411A328E1935100DD9F4D /* GetTokenAccountsByOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF4411A228E1935100DD9F4D /* GetTokenAccountsByOwner.swift */; };
 		EF959AA128D3379300229626 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF959AA028D3379300229626 /* AppDelegate.swift */; };
 		EF959AA328D3379300229626 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF959AA228D3379300229626 /* SceneDelegate.swift */; };
 		EF959AA528D3379300229626 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF959AA428D3379300229626 /* ViewController.swift */; };
@@ -28,6 +29,7 @@
 		97AB80D8A435F0E876FF2391 /* Pods-Solana.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Solana.debug.xcconfig"; path = "Target Support Files/Pods-Solana/Pods-Solana.debug.xcconfig"; sourceTree = "<group>"; };
 		C49C0EC84036AF7277AC6DB9 /* Pods_Solana.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Solana.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF37893828E0B6EB0079021B /* GetBalanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBalanceViewController.swift; sourceTree = "<group>"; };
+		EF4411A228E1935100DD9F4D /* GetTokenAccountsByOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetTokenAccountsByOwner.swift; sourceTree = "<group>"; };
 		EF959A9D28D3379300229626 /* Solana.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Solana.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF959AA028D3379300229626 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EF959AA228D3379300229626 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 				EF959AA228D3379300229626 /* SceneDelegate.swift */,
 				EF959AA428D3379300229626 /* ViewController.swift */,
 				EF37893828E0B6EB0079021B /* GetBalanceViewController.swift */,
+				EF4411A228E1935100DD9F4D /* GetTokenAccountsByOwner.swift */,
 				EFC73DD728D4613F00B0B732 /* TransferViewController.swift */,
 				EFC73DE128D4755A00B0B732 /* SolanaWeb */,
 				EF959AA628D3379300229626 /* Main.storyboard */,
@@ -243,6 +246,7 @@
 				EFC73DE728D4756E00B0B732 /* SolanaWeb.swift in Sources */,
 				EFC73DE628D4756E00B0B732 /* SOLWebViewJavascriptBridge.swift in Sources */,
 				EFC73DE928D4756E00B0B732 /* SOLWebViewJavascriptBridgeBase.swift in Sources */,
+				EF4411A328E1935100DD9F4D /* GetTokenAccountsByOwner.swift in Sources */,
 				EF959AA128D3379300229626 /* AppDelegate.swift in Sources */,
 				EF959AA328D3379300229626 /* SceneDelegate.swift in Sources */,
 			);

@@ -100,6 +100,27 @@ public class SolanaWeb: NSObject {
             }
         }
     }
+    private func getArrayFromJSONString(jsonString: String)->[[String:Any]] {
+        let jsonData = jsonString.data(using: .utf8)!
+        guard let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as? [[String:Any]]  else {return [[String:Any]]() }
+        return array
+    }
+    
+    public func getTokenAccountsByOwner(address: String, endpoint: String = SolanaMainNet, onCompleted: ((Bool, String,[[String:Any]]) -> Void)? = nil) {
+        let params: [String: String] = ["address": address, "endpoint": endpoint]
+        self.bridge.call(handlerName: "getTokenAccountsByOwner", data: params) { [weak self] response in
+            guard let self = self else { return }
+            if self.showLog { print("response = \(String(describing: response))") }
+            guard let temp = response as? [String: Any], let state = temp["result"] as? Bool else {
+                onCompleted?(false, "",[[String:Any]]())
+                return
+            }
+            if let tokenAccountsJson = temp["tokenAccounts"] as? String {
+                let tokenAccounts = self.getArrayFromJSONString(jsonString: tokenAccountsJson)
+                onCompleted?(state,tokenAccountsJson,tokenAccounts)
+            }
+        }
+    }
 
     public func solanaTransfer(privateKey: String,
                                toAddress: String,
