@@ -28,7 +28,7 @@ class GetTokenAccountsByOwner: UIViewController {
         let tv = UITextView()
         tv.layer.borderColor = UIColor.black.cgColor
         tv.layer.borderWidth = 1.0
-        tv.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        tv.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         tv.text = "waiting…"
         return tv
     }()
