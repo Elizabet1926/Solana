@@ -7,12 +7,12 @@
 
 ![](Resource/Demo01.png)
 
-For more specific usage, please refer to the [demo](https://github.com/Elizabet1926/Solana/tree/master/Solana)
+For more specific usage, please refer to the [demo](https://github.com/Elizabet1926/Solana/tree/master/Demo)
 
 ###  CocoaPods
 
 ```ruby
-pod 'SolanaWeb', '~> 1.0.1'
+pod 'SolanaWeb', '~> 1.0.2'
 ```
 
 ### Example usage
@@ -58,7 +58,7 @@ solanaWeb.solanaTokenTransfer(privateKey: privateKey, toAddress: toAddress, mint
 }
 ```
 
-For more specific usage, please refer to the [demo](https://github.com/Elizabet1926/Solana/tree/master/Solana)
+For more specific usage, please refer to the [demo](https://github.com/Elizabet1926/Solana/tree/master/Demo)
 
 ## License
 
