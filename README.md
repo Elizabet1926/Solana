@@ -25,13 +25,13 @@ import SolanaWeb
 ```swift
 let solanaWeb = SolanaWeb()
 if solanaWeb.isGenerateSolanaWebInstanceSuccess {
-        transferType == .sendSOL ? sendSOL() : sendSPLToken()
+   transferType == .sendSOL ? sendSOL() : sendSPLToken()
 } else {
-        solanaWeb.setup(showLog: true) { [weak self] _ in
-            guard let self = self else { return }
-            self.transferType == .sendSOL ? self.sendSOL() : self.sendSPLToken()
-        }
-    }
+   solanaWeb.setup(showLog: true) { [weak self] _ in
+      guard let self = self else { return }
+      self.transferType == .sendSOL ? self.sendSOL() : self.sendSPLToken()
+   }
+}
 ```
 
 ##### Send SOL
