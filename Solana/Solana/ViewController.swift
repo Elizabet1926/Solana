@@ -30,7 +30,7 @@ class ViewController: UIViewController {
     }
 
     func setupUI() {
-        title = "HomePage"
+        title = "SolanaWeb"
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()

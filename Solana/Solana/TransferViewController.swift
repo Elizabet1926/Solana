@@ -36,8 +36,7 @@ class TransferViewController: UIViewController {
     }()
     lazy var privateKeyTextView: UITextView = {
         let textView = UITextView()
-//        textView.text = "3dvCKD957oW22fs7G6LhXbbRQ7QdLWrvNzUCM8ZAaWJfFxBMJfRPt4CjdFB4qTWtVV7BRjdVnPS7qJagFqZvvaHa"
-        textView.text = "2xxGiyuAksnxHF5bNCXguPfYYy6s2Yq7TAAnurzpnmMyxuLy1eF4bWxixkwGpdPRe5JZHaoiAmeaZKBJNgYgSTBt"
+        textView.text = "3dvCKD957oW22fs7G6LhXbbRQ7QdLWrvNzUCM8ZAaWJfFxBMJfRPt4CjdFB4qTWtVV7BRjdVnPS7qJagFqZvvaHa"
         textView.layer.borderWidth = 1
         textView.layer.borderColor = UIColor.brown.cgColor
         return textView
