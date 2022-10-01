@@ -2,7 +2,7 @@
 //  GetTokenAccountsByOwner.swift
 //  Solana
 //
-//  Created by Charles on 2022/9/26.
+//  Created by Elizabet on 2022/9/26.
 //
 
 import Foundation
@@ -36,8 +36,8 @@ class GetTokenAccountsByOwner: UIViewController {
     lazy var addressField: UITextField = {
         let addressField = UITextField()
         addressField.borderStyle = .line
-        addressField.placeholder = "査詢地址輸入框"
-        addressField.text = "Enx3p7cLUrt4CZeXNvc2hovjir51nN9yn1f81mwVkX7r"
+        addressField.placeholder = "address input"
+        addressField.text = "5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9"
         return addressField
     }()
 
@@ -93,7 +93,7 @@ class GetTokenAccountsByOwner: UIViewController {
     }
 
     @objc func btnAction() {
-        detailTextView.text = "正在查詢…"
+        detailTextView.text = "fetching..."
         guard let address = addressField.text else { return }
         getTokenAccountsByOwnerBtn.isEnabled = false
         if solanaWeb.isGenerateSolanaWebInstanceSuccess {

@@ -9,6 +9,11 @@ import Foundation
 import WebKit
 
 public let SolanaMainNet: String = "https://solana-mainnet.phantom.tech"
+public let SolanaMainNet1: String = "https://solana.maiziqianbao.net"
+public let SolanaMainNet2: String = "https://api.mainnet-beta.solana.com"
+public let SolanaMainNet3: String = "https://solana-api.projectserum.com"
+public let SolanaMainNet4: String = "https://rpc.ankr.com/solana"
+
 
 public enum SPLToken: String, CaseIterable {
     case USDT = "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"
@@ -27,7 +32,7 @@ public class SolanaWeb: NSObject {
         self.webView = WKWebView(frame: .zero, configuration: webConfiguration)
         self.webView.navigationDelegate = self
         self.webView.configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
-        self.bridge = SOLWebViewJavascriptBridge(webView: self.webView)
+        self.bridge = SOLWebViewJavascriptBridge(webView: self.webView, isHookConsole: false)
     }
 
     deinit {
@@ -84,11 +89,12 @@ public class SolanaWeb: NSObject {
                                    SPLTokenAddress: String = SPLToken.USDT.rawValue,
                                    decimalPoints: Double = 6.0,
                                    endpoint: String = SolanaMainNet,
-                                   onCompleted: ((Bool, String) -> Void)? = nil) {
+                                   onCompleted: ((Bool, String) -> Void)? = nil)
+    {
         let params: [String: Any] = ["address": address,
-                                        "endpoint": endpoint,
-                                        "SPLTokenAddress": SPLTokenAddress,
-                                        "decimalPoints": decimalPoints]
+                                     "endpoint": endpoint,
+                                     "SPLTokenAddress": SPLTokenAddress,
+                                     "decimalPoints": decimalPoints]
         self.bridge.call(handlerName: "getSPLTokenBalance", data: params) { response in
             if self.showLog { print("response = \(String(describing: response))") }
             guard let temp = response as? [String: Any], let state = temp["result"] as? Bool else {
@@ -100,24 +106,25 @@ public class SolanaWeb: NSObject {
             }
         }
     }
-    private func getArrayFromJSONString(jsonString: String)->[[String:Any]] {
+
+    private func getArrayFromJSONString(jsonString: String) -> [[String: Any]] {
         let jsonData = jsonString.data(using: .utf8)!
-        guard let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as? [[String:Any]]  else {return [[String:Any]]() }
+        guard let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as? [[String: Any]] else { return [[String: Any]]() }
         return array
     }
-    
-    public func getTokenAccountsByOwner(address: String, endpoint: String = SolanaMainNet, onCompleted: ((Bool, String,[[String:Any]]) -> Void)? = nil) {
+
+    public func getTokenAccountsByOwner(address: String, endpoint: String = SolanaMainNet, onCompleted: ((Bool, String, [[String: Any]]) -> Void)? = nil) {
         let params: [String: String] = ["address": address, "endpoint": endpoint]
         self.bridge.call(handlerName: "getTokenAccountsByOwner", data: params) { [weak self] response in
             guard let self = self else { return }
             if self.showLog { print("response = \(String(describing: response))") }
             guard let temp = response as? [String: Any], let state = temp["result"] as? Bool else {
-                onCompleted?(false, "",[[String:Any]]())
+                onCompleted?(false, "", [[String: Any]]())
                 return
             }
             if let tokenAccountsJson = temp["tokenAccounts"] as? String {
                 let tokenAccounts = self.getArrayFromJSONString(jsonString: tokenAccountsJson)
-                onCompleted?(state,tokenAccountsJson,tokenAccounts)
+                onCompleted?(state, tokenAccountsJson, tokenAccounts)
             }
         }
     }
@@ -133,7 +140,9 @@ public class SolanaWeb: NSObject {
                                      "amount": amount,
                                      "endpoint": endpoint,
                                      "secretKey": privateKey]
-        self.bridge.call(handlerName: "solanaMainTransfer", data: params) { response in
+        self.bridge.call(handlerName: "solanaMainTransfer", data: params) {[weak self] response in
+            guard let self = self else { return }
+            if self.showLog { print("response = \(String(describing: response))") }
             guard let temp = response as? [String: Any], let state = temp["result"] as? Bool, let txid = temp["txid"] as? String else {
                 onCompleted?(false, "error")
                 return
@@ -157,7 +166,9 @@ public class SolanaWeb: NSObject {
                                      "endpoint": endpoint,
                                      "decimals": decimalPoints,
                                      "secretKey": privateKey]
-        self.bridge.call(handlerName: "solanaTokenTransfer", data: params) { response in
+        self.bridge.call(handlerName: "solanaTokenTransfer", data: params) { [weak self] response in
+            guard let self = self else { return }
+            if self.showLog { print("response = \(String(describing: response))") }
             guard let temp = response as? [String: Any], let state = temp["result"] as? Bool, let txid = temp["txid"] as? String else {
                 onCompleted?(false, "error")
                 return

@@ -26,7 +26,7 @@ class TransferViewController: UIViewController {
 
     lazy var transferBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setTitle("轉帳", for: .normal)
+        btn.setTitle("transfer", for: .normal)
         btn.setTitleColor(.white, for: .normal)
         btn.backgroundColor = .red
         btn.addTarget(self, action: #selector(transferAction), for: .touchUpInside)
@@ -34,10 +34,10 @@ class TransferViewController: UIViewController {
         btn.layer.masksToBounds = true
         return btn
     }()
-    
     lazy var privateKeyTextView: UITextView = {
         let textView = UITextView()
-        textView.text = ""
+//        textView.text = "3dvCKD957oW22fs7G6LhXbbRQ7QdLWrvNzUCM8ZAaWJfFxBMJfRPt4CjdFB4qTWtVV7BRjdVnPS7qJagFqZvvaHa"
+        textView.text = "2xxGiyuAksnxHF5bNCXguPfYYy6s2Yq7TAAnurzpnmMyxuLy1eF4bWxixkwGpdPRe5JZHaoiAmeaZKBJNgYgSTBt"
         textView.layer.borderWidth = 1
         textView.layer.borderColor = UIColor.brown.cgColor
         return textView
@@ -46,7 +46,7 @@ class TransferViewController: UIViewController {
     lazy var reviceAddressField: UITextField = {
         let reviceAddressField = UITextField()
         reviceAddressField.borderStyle = .line
-        reviceAddressField.placeholder = "收款地址輸入框"
+        reviceAddressField.placeholder = "revice address input"
         reviceAddressField.text = "Enx3p7cLUrt4CZeXNvc2hovjir51nN9yn1f81mwVkX7r"
         return reviceAddressField
     }()
@@ -54,7 +54,7 @@ class TransferViewController: UIViewController {
     lazy var SPLTokenAddressTextField: UITextField = {
         let textField = UITextField()
         textField.borderStyle = .line
-        textField.placeholder = "請輸入SPLToken地址"
+        textField.placeholder = "SPLToken address input"
         return textField
     }()
     
@@ -62,15 +62,15 @@ class TransferViewController: UIViewController {
         let amountTextField = UITextField()
         amountTextField.borderStyle = .line
         amountTextField.keyboardType = .numberPad
-        amountTextField.placeholder = "金額輸入框"
-        amountTextField.text = "0.0001"
+        amountTextField.placeholder = "amount input"
+        amountTextField.text = "0.00001"
         return amountTextField
     }()
     
     lazy var hashLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.text = "交易hash值"
+        label.text = "Signature..."
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         label.textAlignment = .center
         label.textColor = .blue
@@ -82,7 +82,7 @@ class TransferViewController: UIViewController {
     
     lazy var detailBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setTitle("査詢交易詳情", for: .normal)
+        btn.setTitle("Get detail in solscan.io", for: .normal)
         btn.setTitleColor(.white, for: .normal)
         btn.backgroundColor = .red
         btn.addTarget(self, action: #selector(queryAction), for: .touchUpInside)
@@ -159,7 +159,7 @@ class TransferViewController: UIViewController {
     }
     
     @objc func transferAction() {
-        print("点击了转账")
+        print("tap transfer")
         if solanaWeb.isGenerateSolanaWebInstanceSuccess {
             transferType == .sendSOL ? sendSOL() : sendSPLToken()
         } else {

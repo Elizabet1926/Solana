@@ -1,20 +1,9 @@
-//  Permission is hereby granted, free of charge, to any person obtaining a copy
-//  of this software and associated documentation files (the "Software"), to deal
-//  in the Software without restriction, including without limitation the rights
-//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  copies of the Software, and to permit persons to whom the Software is
-//  furnished to do so, subject to the following conditions:
 //
-//  The above copyright notice and this permission notice shall be included in
-//  all copies or substantial portions of the Software.
+//  Solana.swift
+//  Solana
 //
-//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  THE SOFTWARE.
+//  Created by Elizabet on 2022/9/15.
+//
 
 import Foundation
 import WebKit
@@ -29,13 +18,13 @@ public class SOLWebViewJavascriptBridge: NSObject {
     private weak var webView: WKWebView?
     private var base: SOLWebViewJavascriptBridgeBase!
     public var consolePipeClosure: ConsolePipeClosure?
-    public init(webView: WKWebView, _ otherJSCode: String = "", injectionTime: WKUserScriptInjectionTime = .atDocumentStart) {
+    public init(webView: WKWebView, _ otherJSCode: String = "", isHookConsole: Bool = true,injectionTime: WKUserScriptInjectionTime = .atDocumentStart) {
         super.init()
         self.webView = webView
         base = SOLWebViewJavascriptBridgeBase()
         base.delegate = self
         addScriptMessageHandlers()
-        injectJavascriptFile(otherJSCode, injectionTime: injectionTime)
+        injectJavascriptFile(otherJSCode, isHookConsole: isHookConsole,injectionTime: injectionTime)
     }
 
     deinit {
@@ -61,9 +50,9 @@ public class SOLWebViewJavascriptBridge: NSObject {
         base.send(handlerName: handlerName, data: data, callback: callback)
     }
 
-    private func injectJavascriptFile(_ otherJSCode: String = "", injectionTime: WKUserScriptInjectionTime = .atDocumentStart) {
+    private func injectJavascriptFile(_ otherJSCode: String = "", isHookConsole: Bool ,injectionTime: WKUserScriptInjectionTime = .atDocumentStart) {
         let bridgeJS = SOLJavascriptCode.bridge()
-        let hookConsoleJS = SOLJavascriptCode.hookConsole()
+        let hookConsoleJS = isHookConsole ? SOLJavascriptCode.hookConsole() : ""
         let finalJS = "\(bridgeJS)" + "\(hookConsoleJS)"
         let userScript = WKUserScript(source: finalJS, injectionTime: injectionTime, forMainFrameOnly: true)
         webView?.configuration.userContentController.addUserScript(userScript)

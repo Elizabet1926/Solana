@@ -29,13 +29,13 @@ public class SOLWebViewJavascriptBridge: NSObject {
     private weak var webView: WKWebView?
     private var base: SOLWebViewJavascriptBridgeBase!
     public var consolePipeClosure: ConsolePipeClosure?
-    public init(webView: WKWebView, _ otherJSCode: String = "", injectionTime: WKUserScriptInjectionTime = .atDocumentStart) {
+    public init(webView: WKWebView, _ otherJSCode: String = "", isHookConsole: Bool = true,injectionTime: WKUserScriptInjectionTime = .atDocumentStart) {
         super.init()
         self.webView = webView
         base = SOLWebViewJavascriptBridgeBase()
         base.delegate = self
         addScriptMessageHandlers()
-        injectJavascriptFile(otherJSCode, injectionTime: injectionTime)
+        injectJavascriptFile(otherJSCode, isHookConsole: isHookConsole,injectionTime: injectionTime)
     }
 
     deinit {
@@ -61,9 +61,9 @@ public class SOLWebViewJavascriptBridge: NSObject {
         base.send(handlerName: handlerName, data: data, callback: callback)
     }
 
-    private func injectJavascriptFile(_ otherJSCode: String = "", injectionTime: WKUserScriptInjectionTime = .atDocumentStart) {
+    private func injectJavascriptFile(_ otherJSCode: String = "", isHookConsole: Bool ,injectionTime: WKUserScriptInjectionTime = .atDocumentStart) {
         let bridgeJS = SOLJavascriptCode.bridge()
-        let hookConsoleJS = SOLJavascriptCode.hookConsole()
+        let hookConsoleJS = isHookConsole ? SOLJavascriptCode.hookConsole() : ""
         let finalJS = "\(bridgeJS)" + "\(hookConsoleJS)"
         let userScript = WKUserScript(source: finalJS, injectionTime: injectionTime, forMainFrameOnly: true)
         webView?.configuration.userContentController.addUserScript(userScript)

@@ -22,7 +22,7 @@ class GetBalanceViewController: UIViewController {
 
     lazy var getBalanceBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setTitle("餘額查詢", for: .normal)
+        btn.setTitle("getBalance", for: .normal)
         btn.setTitleColor(.white, for: .normal)
         btn.backgroundColor = .red
         btn.addTarget(self, action: #selector(getBalanceAction), for: .touchUpInside)
@@ -34,22 +34,22 @@ class GetBalanceViewController: UIViewController {
     lazy var balanceLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        label.text = "等待查詢餘額…"
+        label.text = "wating for get balance..."
         return label
     }()
 
     lazy var addressField: UITextField = {
         let addressField = UITextField()
         addressField.borderStyle = .line
-        addressField.placeholder = "査詢地址輸入框"
-        addressField.text = "Enx3p7cLUrt4CZeXNvc2hovjir51nN9yn1f81mwVkX7r"
+        addressField.placeholder = "address input"
+        addressField.text = "5tzFkiKscXHK5ZXCGbXZxdw7gTjjD1mBwuoFbhUvuAi9"
         return addressField
     }()
 
     lazy var splTokenAddressTextField: UITextField = {
         let textField = UITextField()
         textField.borderStyle = .line
-        textField.placeholder = "請輸入SPLToken地址"
+        textField.placeholder = "SPLToken address input"
         return textField
     }()
 
@@ -68,7 +68,7 @@ class GetBalanceViewController: UIViewController {
     }
 
     func setupNav() {
-        title = "獲取餘額"
+        title = "get balance"
     }
 
     func setupContent() {
@@ -108,7 +108,7 @@ class GetBalanceViewController: UIViewController {
             guard let self = self else { return }
             self.getBalanceBtn.isEnabled = true
             if state {
-                let title = self.getBalanceType == .getSOLBalance ? "SOL餘額：" : "SPLToken餘額："
+                let title = self.getBalanceType == .getSOLBalance ? "SOL Balance: " : "SPLToken Balance: "
                 self.balanceLabel.text = title + balance
             } else {}
         }
@@ -119,7 +119,7 @@ class GetBalanceViewController: UIViewController {
             guard let self = self else { return }
             self.getBalanceBtn.isEnabled = true
             if state {
-                let title = self.getBalanceType == .getSOLBalance ? "SOL餘額：" : "SPLToken餘額："
+                let title = self.getBalanceType == .getSOLBalance ? "SOL Balance: " : "SPLToken Balance: "
                 self.balanceLabel.text = title + balance
             } else {}
         }
@@ -127,7 +127,7 @@ class GetBalanceViewController: UIViewController {
 
     @objc func getBalanceAction() {
         getBalanceBtn.isEnabled = false
-        balanceLabel.text = "正在查詢餘額…"
+        balanceLabel.text = "fetching balance ..."
         guard let address = addressField.text, let splTokenAddress = splTokenAddressTextField.text else { return }
 
         if solanaWeb.isGenerateSolanaWebInstanceSuccess {
