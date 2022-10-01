@@ -23,7 +23,7 @@ public enum SPLToken: String, CaseIterable {
 public class SolanaWeb: NSObject {
     var webView: WKWebView!
     var bridge: SOLWebViewJavascriptBridge!
-    var isGenerateSolanaWebInstanceSuccess: Bool = false
+    public var isGenerateSolanaWebInstanceSuccess: Bool = false
     var onCompleted: ((Bool) -> Void)?
     var showLog: Bool = true
     override public init() {
@@ -39,7 +39,7 @@ public class SolanaWeb: NSObject {
         print("\(type(of: self)) release")
     }
 
-    func setup(showLog: Bool = true, onCompleted: ((Bool) -> Void)? = nil) {
+    public func setup(showLog: Bool = true, onCompleted: ((Bool) -> Void)? = nil) {
         self.onCompleted = onCompleted
         self.showLog = showLog
         if showLog {

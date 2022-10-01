@@ -7,7 +7,7 @@
 
 import Foundation
 import SnapKit
-
+import SolanaWeb
 enum GetBalanceType: String, CaseIterable {
     case getSOLBalance
     case getSPLTokenBalance

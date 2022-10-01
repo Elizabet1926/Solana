@@ -17,11 +17,6 @@
 		EF959AAA28D3379700229626 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF959AA928D3379700229626 /* Assets.xcassets */; };
 		EF959AAD28D3379700229626 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF959AAB28D3379700229626 /* LaunchScreen.storyboard */; };
 		EFC73DD828D4613F00B0B732 /* TransferViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC73DD728D4613F00B0B732 /* TransferViewController.swift */; };
-		EFC73DDA28D4718600B0B732 /* SolanaWeb.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EFC73DD928D4718600B0B732 /* SolanaWeb.bundle */; };
-		EFC73DE628D4756E00B0B732 /* SOLWebViewJavascriptBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC73DE528D4756E00B0B732 /* SOLWebViewJavascriptBridge.swift */; };
-		EFC73DE728D4756E00B0B732 /* SolanaWeb.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC73DE428D4756E00B0B732 /* SolanaWeb.swift */; };
-		EFC73DE828D4756E00B0B732 /* SOLJavascriptCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC73DE328D4756E00B0B732 /* SOLJavascriptCode.swift */; };
-		EFC73DE928D4756E00B0B732 /* SOLWebViewJavascriptBridgeBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC73DE228D4756E00B0B732 /* SOLWebViewJavascriptBridgeBase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,11 +34,6 @@
 		EF959AAC28D3379700229626 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EF959AAE28D3379700229626 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EFC73DD728D4613F00B0B732 /* TransferViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferViewController.swift; sourceTree = "<group>"; };
-		EFC73DD928D4718600B0B732 /* SolanaWeb.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SolanaWeb.bundle; sourceTree = "<group>"; };
-		EFC73DE228D4756E00B0B732 /* SOLWebViewJavascriptBridgeBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOLWebViewJavascriptBridgeBase.swift; sourceTree = "<group>"; };
-		EFC73DE328D4756E00B0B732 /* SOLJavascriptCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOLJavascriptCode.swift; sourceTree = "<group>"; };
-		EFC73DE428D4756E00B0B732 /* SolanaWeb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolanaWeb.swift; sourceTree = "<group>"; };
-		EFC73DE528D4756E00B0B732 /* SOLWebViewJavascriptBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SOLWebViewJavascriptBridge.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,25 +92,12 @@
 				EF37893828E0B6EB0079021B /* GetBalanceViewController.swift */,
 				EF4411A228E1935100DD9F4D /* GetTokenAccountsByOwner.swift */,
 				EFC73DD728D4613F00B0B732 /* TransferViewController.swift */,
-				EFC73DE128D4755A00B0B732 /* SolanaWeb */,
 				EF959AA628D3379300229626 /* Main.storyboard */,
 				EF959AA928D3379700229626 /* Assets.xcassets */,
 				EF959AAB28D3379700229626 /* LaunchScreen.storyboard */,
 				EF959AAE28D3379700229626 /* Info.plist */,
 			);
 			path = Solana;
-			sourceTree = "<group>";
-		};
-		EFC73DE128D4755A00B0B732 /* SolanaWeb */ = {
-			isa = PBXGroup;
-			children = (
-				EFC73DD928D4718600B0B732 /* SolanaWeb.bundle */,
-				EFC73DE428D4756E00B0B732 /* SolanaWeb.swift */,
-				EFC73DE328D4756E00B0B732 /* SOLJavascriptCode.swift */,
-				EFC73DE528D4756E00B0B732 /* SOLWebViewJavascriptBridge.swift */,
-				EFC73DE228D4756E00B0B732 /* SOLWebViewJavascriptBridgeBase.swift */,
-			);
-			path = SolanaWeb;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -183,7 +160,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EFC73DDA28D4718600B0B732 /* SolanaWeb.bundle in Resources */,
 				EF959AAD28D3379700229626 /* LaunchScreen.storyboard in Resources */,
 				EF959AAA28D3379700229626 /* Assets.xcassets in Resources */,
 				EF959AA828D3379300229626 /* Main.storyboard in Resources */,
@@ -240,12 +216,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				EF959AA528D3379300229626 /* ViewController.swift in Sources */,
-				EFC73DE828D4756E00B0B732 /* SOLJavascriptCode.swift in Sources */,
 				EF37893928E0B6EB0079021B /* GetBalanceViewController.swift in Sources */,
 				EFC73DD828D4613F00B0B732 /* TransferViewController.swift in Sources */,
-				EFC73DE728D4756E00B0B732 /* SolanaWeb.swift in Sources */,
-				EFC73DE628D4756E00B0B732 /* SOLWebViewJavascriptBridge.swift in Sources */,
-				EFC73DE928D4756E00B0B732 /* SOLWebViewJavascriptBridgeBase.swift in Sources */,
 				EF4411A328E1935100DD9F4D /* GetTokenAccountsByOwner.swift in Sources */,
 				EF959AA128D3379300229626 /* AppDelegate.swift in Sources */,
 				EF959AA328D3379300229626 /* SceneDelegate.swift in Sources */,

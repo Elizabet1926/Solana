@@ -9,7 +9,7 @@ import Foundation
 import SafariServices
 import SnapKit
 import UIKit
-  
+import SolanaWeb
 let margin: CGFloat = 20.0
 
 enum TransferType: String, CaseIterable {

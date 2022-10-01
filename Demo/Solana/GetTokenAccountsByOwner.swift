@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SolanaWeb
 class GetTokenAccountsByOwner: UIViewController {
     lazy var solanaWeb: SolanaWeb = {
         let sw = SolanaWeb()
