@@ -19,8 +19,8 @@ enum TransferType: String, CaseIterable {
 
 class TransferViewController: UIViewController {
     var transferType: TransferType = .sendSOL
-    lazy var solanaWeb: SolanaWeb = {
-        let sw = SolanaWeb()
+    lazy var solanaWeb: SolanaWeb3_V1 = {
+        let sw = SolanaWeb3_V1()
         return sw
     }()
 

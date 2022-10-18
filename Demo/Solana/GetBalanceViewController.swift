@@ -15,8 +15,8 @@ enum GetBalanceType: String, CaseIterable {
 
 class GetBalanceViewController: UIViewController {
     var getBalanceType: GetBalanceType = .getSOLBalance
-    lazy var solanaWeb: SolanaWeb = {
-        let sw = SolanaWeb()
+    lazy var solanaWeb: SolanaWeb3_V1 = {
+        let sw = SolanaWeb3_V1()
         return sw
     }()
 

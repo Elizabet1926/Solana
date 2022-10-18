@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 import SolanaWeb
 class GetTokenAccountsByOwner: UIViewController {
-    lazy var solanaWeb: SolanaWeb = {
-        let sw = SolanaWeb()
+    lazy var solanaWeb: SolanaWeb3_V1 = {
+        let sw = SolanaWeb3_V1()
         return sw
     }()
 
@@ -84,7 +84,7 @@ class GetTokenAccountsByOwner: UIViewController {
     }
 
     func getTokenAccountsByOwner(_ address: String) {
-        solanaWeb.getTokenAccountsByOwner(address: address) { [weak self] state, tokenAccountsJson, _ in
+        solanaWeb.getTokenAccountsByOwner(address: address) { [weak self] state, tokenAccountsJson in
             guard let self = self else { return }
             self.getTokenAccountsByOwnerBtn.isEnabled = true
             if state {

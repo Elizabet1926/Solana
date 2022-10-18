@@ -20,7 +20,7 @@ public enum SPLToken: String, CaseIterable {
     case USDC = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
 }
 
-public class SolanaWeb3V1: NSObject {
+public class SolanaWeb3_V1: NSObject {
     var webView: WKWebView!
     var bridge: SOLWebViewJavascriptBridge!
     public var isGenerateSolanaWebInstanceSuccess: Bool = false
@@ -84,7 +84,6 @@ public class SolanaWeb3V1: NSObject {
             }
         }
     }
-
     public func getSPLTokenBalance(address: String,
                                    SPLTokenAddress: String = SPLToken.USDT.rawValue,
                                    decimalPoints: Double = 6.0,
@@ -107,24 +106,19 @@ public class SolanaWeb3V1: NSObject {
         }
     }
 
-    private func getArrayFromJSONString(jsonString: String) -> [[String: Any]] {
-        let jsonData = jsonString.data(using: .utf8)!
-        guard let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as? [[String: Any]] else { return [[String: Any]]() }
-        return array
-    }
-
-    public func getTokenAccountsByOwner(address: String, endpoint: String = SolanaMainNet, onCompleted: ((Bool, String, [[String: Any]]) -> Void)? = nil) {
+    public func getTokenAccountsByOwner(address: String, endpoint: String = SolanaMainNet, onCompleted: ((Bool, String) -> Void)? = nil) {
         let params: [String: String] = ["address": address, "endpoint": endpoint]
         self.bridge.call(handlerName: "getTokenAccountsByOwner", data: params) { [weak self] response in
             guard let self = self else { return }
             if self.showLog { print("response = \(String(describing: response))") }
             guard let temp = response as? [String: Any], let state = temp["result"] as? Bool else {
-                onCompleted?(false, "", [[String: Any]]())
+                onCompleted?(false, "")
                 return
             }
             if let tokenAccountsJson = temp["tokenAccounts"] as? String {
-                let tokenAccounts = self.getArrayFromJSONString(jsonString: tokenAccountsJson)
-                onCompleted?(state, tokenAccountsJson, tokenAccounts)
+                onCompleted?(state, tokenAccountsJson)
+            } else {
+                onCompleted?(false, "")
             }
         }
     }
@@ -178,7 +172,7 @@ public class SolanaWeb3V1: NSObject {
     }
 }
 
-extension SolanaWeb: WKNavigationDelegate {
+extension SolanaWeb3_V1: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         if self.showLog {
             print("WKWebView didFail---->")
@@ -224,7 +218,7 @@ extension SolanaWeb: WKNavigationDelegate {
     }
 }
 
-extension SolanaWeb {
+extension SolanaWeb3_V1 {
     private func doubleValue(string: String) -> Double {
         let decima = NSDecimalNumber(string: string.count == 0 ? "0" : string)
         let doubleValue = Double(truncating: decima as NSNumber)
