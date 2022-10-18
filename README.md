@@ -23,7 +23,7 @@ import SolanaWeb
 
 ##### Setup SolanaWeb
 ```swift
-let solanaWeb = SolanaWeb()
+let solanaWeb = SolanaWeb3_V1()
 if solanaWeb.isGenerateSolanaWebInstanceSuccess {
    transferType == .sendSOL ? sendSOL() : sendSPLToken()
 } else {
