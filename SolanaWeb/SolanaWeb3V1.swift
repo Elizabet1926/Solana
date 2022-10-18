@@ -20,7 +20,7 @@ public enum SPLToken: String, CaseIterable {
     case USDC = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
 }
 
-public class SolanaWeb: NSObject {
+public class SolanaWeb3V1: NSObject {
     var webView: WKWebView!
     var bridge: SOLWebViewJavascriptBridge!
     public var isGenerateSolanaWebInstanceSuccess: Bool = false

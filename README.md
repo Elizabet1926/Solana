@@ -12,7 +12,7 @@ For more specific usage, please refer to the [demo](https://github.com/Elizabet1
 ###  CocoaPods
 
 ```ruby
-pod 'SolanaWeb', '~> 1.0.2'
+pod 'SolanaWeb', '~> 1.0.3'
 ```
 
 ### Example usage

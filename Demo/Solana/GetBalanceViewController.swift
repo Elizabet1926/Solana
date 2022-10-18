@@ -34,7 +34,7 @@ class GetBalanceViewController: UIViewController {
     lazy var balanceLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        label.text = "wating for get balance..."
+        label.text = "waiting for get balance..."
         return label
     }()
 
