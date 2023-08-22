@@ -20,10 +20,10 @@ public enum SPLToken: String, CaseIterable {
     case USDC = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
 }
 
-public class SolanaWeb3_V1: NSObject {
+public class SolanaWeb: NSObject {
     var webView: WKWebView!
     var bridge: SOLWebViewJavascriptBridge!
-    public var isGenerateSolanaWebInstanceSuccess: Bool = false
+    var isGenerateSolanaWebInstanceSuccess: Bool = false
     var onCompleted: ((Bool) -> Void)?
     var showLog: Bool = true
     override public init() {
@@ -39,7 +39,7 @@ public class SolanaWeb3_V1: NSObject {
         print("\(type(of: self)) release")
     }
 
-    public func setup(showLog: Bool = true, onCompleted: ((Bool) -> Void)? = nil) {
+    func setup(showLog: Bool = true, onCompleted: ((Bool) -> Void)? = nil) {
         self.onCompleted = onCompleted
         self.showLog = showLog
         if showLog {
@@ -84,6 +84,7 @@ public class SolanaWeb3_V1: NSObject {
             }
         }
     }
+
     public func getSPLTokenBalance(address: String,
                                    SPLTokenAddress: String = SPLToken.USDT.rawValue,
                                    decimalPoints: Double = 6.0,
@@ -106,19 +107,24 @@ public class SolanaWeb3_V1: NSObject {
         }
     }
 
-    public func getTokenAccountsByOwner(address: String, endpoint: String = SolanaMainNet, onCompleted: ((Bool, String) -> Void)? = nil) {
+    private func getArrayFromJSONString(jsonString: String) -> [[String: Any]] {
+        let jsonData = jsonString.data(using: .utf8)!
+        guard let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as? [[String: Any]] else { return [[String: Any]]() }
+        return array
+    }
+
+    public func getTokenAccountsByOwner(address: String, endpoint: String = SolanaMainNet, onCompleted: ((Bool, String, [[String: Any]]) -> Void)? = nil) {
         let params: [String: String] = ["address": address, "endpoint": endpoint]
         self.bridge.call(handlerName: "getTokenAccountsByOwner", data: params) { [weak self] response in
             guard let self = self else { return }
             if self.showLog { print("response = \(String(describing: response))") }
             guard let temp = response as? [String: Any], let state = temp["result"] as? Bool else {
-                onCompleted?(false, "")
+                onCompleted?(false, "", [[String: Any]]())
                 return
             }
             if let tokenAccountsJson = temp["tokenAccounts"] as? String {
-                onCompleted?(state, tokenAccountsJson)
-            } else {
-                onCompleted?(false, "")
+                let tokenAccounts = self.getArrayFromJSONString(jsonString: tokenAccountsJson)
+                onCompleted?(state, tokenAccountsJson, tokenAccounts)
             }
         }
     }
@@ -172,7 +178,7 @@ public class SolanaWeb3_V1: NSObject {
     }
 }
 
-extension SolanaWeb3_V1: WKNavigationDelegate {
+extension SolanaWeb: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         if self.showLog {
             print("WKWebView didFail---->")
@@ -218,7 +224,7 @@ extension SolanaWeb3_V1: WKNavigationDelegate {
     }
 }
 
-extension SolanaWeb3_V1 {
+extension SolanaWeb {
     private func doubleValue(string: String) -> Double {
         let decima = NSDecimalNumber(string: string.count == 0 ? "0" : string)
         let doubleValue = Double(truncating: decima as NSNumber)

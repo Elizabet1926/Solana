@@ -36,7 +36,7 @@ class TransferViewController: UIViewController {
     }()
     lazy var privateKeyTextView: UITextView = {
         let textView = UITextView()
-        textView.text = "3dvCKD957oW22fs7G6LhXbbRQ7QdLWrvNzUCM8ZAaWJfFxBMJfRPt4CjdFB4qTWtVV7BRjdVnPS7qJagFqZvvaHa"
+        textView.text = "3dvCKD957oW22fs7G6LhXbbRQ7QdLWrvNzUCM8ZAaWJ" + "fFxBMJfRPt4CjdFB4qTWtVV7BRjdVnPS7qJagFqZvvaHa"
         textView.layer.borderWidth = 1
         textView.layer.borderColor = UIColor.brown.cgColor
         return textView
@@ -46,7 +46,7 @@ class TransferViewController: UIViewController {
         let reviceAddressField = UITextField()
         reviceAddressField.borderStyle = .line
         reviceAddressField.placeholder = "revice address input"
-        reviceAddressField.text = "Enx3p7cLUrt4CZeXNvc2hovjir51nN9yn1f81mwVkX7r"
+        reviceAddressField.text = "5MJnpb13kxTY5ip9Mz1kNotDWdfG1TMnz4aA39edVYAz"
         return reviceAddressField
     }()
     
