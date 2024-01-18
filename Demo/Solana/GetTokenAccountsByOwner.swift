@@ -84,12 +84,14 @@ class GetTokenAccountsByOwner: UIViewController {
     }
 
     func getTokenAccountsByOwner(_ address: String) {
-        solanaWeb.getTokenAccountsByOwner(address: address) { [weak self] state, tokenAccountsJson in
+        solanaWeb.getTokenAccountsByOwner(address: address) { [weak self] state, tokenAccountsJson,error in
             guard let self = self else { return }
             self.getTokenAccountsByOwnerBtn.isEnabled = true
             if state {
                 self.detailTextView.text = tokenAccountsJson
-            } else {}
+            } else {
+                self.detailTextView.text = error
+            }
         }
     }
 

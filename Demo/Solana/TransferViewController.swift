@@ -173,11 +173,15 @@ class TransferViewController: UIViewController {
         guard let privateKey = privateKeyTextView.text,
               let toAddress = reviceAddressField.text,
               let amount = amountTextField.text else { return }
-        solanaWeb.solanaTransfer(privateKey: privateKey, toAddress: toAddress, amount: amount, endpoint: SolanaMainNet) { [weak self] state, txid in
+        solanaWeb.solanaTransfer(privateKey: privateKey, toAddress: toAddress, amount: amount, endpoint: SolanaMainNet) { [weak self] state, txid,error in
             guard let self = self else { return }
             print("state = \(state)")
             print("txid = \(txid)")
-            self.hashLabel.text = txid
+            if (state) {
+                self.hashLabel.text = txid
+            } else {
+                self.hashLabel.text = error
+            }
         }
     }
     
@@ -186,11 +190,15 @@ class TransferViewController: UIViewController {
               let toAddress = reviceAddressField.text,
               let tokenAddress = SPLTokenAddressTextField.text,
               let amount = amountTextField.text else { return }
-        solanaWeb.solanaTokenTransfer(privateKey: privateKey, toAddress: toAddress, mintAuthority: tokenAddress, amount: amount, endpoint: SolanaMainNet) { [weak self] state, txid in
+        solanaWeb.solanaTokenTransfer(privateKey: privateKey, toAddress: toAddress, mintAuthority: tokenAddress, amount: amount, endpoint: SolanaMainNet) { [weak self] state, txid,error in
             guard let self = self else { return }
             print("state = \(state)")
             print("txid = \(txid)")
-            self.hashLabel.text = txid
+            if (state) {
+                self.hashLabel.text = txid
+            } else {
+                self.hashLabel.text = error
+            }
         }
     }
     

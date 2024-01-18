@@ -8,7 +8,7 @@
 import Foundation
 import WebKit
 
-public let SolanaMainNet: String = "https://solana-mainnet.phantom.tech"
+public let SolanaMainNet: String = "https://api.metaplex.solana.com"
 public let SolanaMainNet1: String = "https://solana.maiziqianbao.net"
 public let SolanaMainNet2: String = "https://api.mainnet-beta.solana.com"
 public let SolanaMainNet3: String = "https://solana-api.projectserum.com"
@@ -20,10 +20,10 @@ public enum SPLToken: String, CaseIterable {
     case USDC = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
 }
 
-public class SolanaWeb: NSObject {
+public class SolanaWeb3_V1: NSObject {
     var webView: WKWebView!
     var bridge: SOLWebViewJavascriptBridge!
-    var isGenerateSolanaWebInstanceSuccess: Bool = false
+    public var isGenerateSolanaWebInstanceSuccess: Bool = false
     var onCompleted: ((Bool) -> Void)?
     var showLog: Bool = true
     override public init() {
@@ -32,14 +32,14 @@ public class SolanaWeb: NSObject {
         self.webView = WKWebView(frame: .zero, configuration: webConfiguration)
         self.webView.navigationDelegate = self
         self.webView.configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
-        self.bridge = SOLWebViewJavascriptBridge(webView: self.webView, isHookConsole: false)
+        self.bridge = SOLWebViewJavascriptBridge(webView: self.webView, isHookConsole: true)
     }
 
     deinit {
         print("\(type(of: self)) release")
     }
 
-    func setup(showLog: Bool = true, onCompleted: ((Bool) -> Void)? = nil) {
+    public func setup(showLog: Bool = true, onCompleted: ((Bool) -> Void)? = nil) {
         self.onCompleted = onCompleted
         self.showLog = showLog
         if showLog {
@@ -71,25 +71,30 @@ public class SolanaWeb: NSObject {
         return bundleResourcePath! + sourceName
     }
 
-    public func getSOLBalance(address: String, endpoint: String = SolanaMainNet, onCompleted: ((Bool, String) -> Void)? = nil) {
+    public func getSOLBalance(address: String, endpoint: String = SolanaMainNet, onCompleted: ((Bool,String, String) -> Void)? = nil) {
         let params: [String: String] = ["address": address, "endpoint": endpoint]
         self.bridge.call(handlerName: "getSOLBalance", data: params) { response in
             if self.showLog { print("response = \(String(describing: response))") }
-            guard let temp = response as? [String: Any], let state = temp["result"] as? Bool else {
-                onCompleted?(false, "error")
+            guard let temp = response as? [String: Any] else {
+                onCompleted?(false, "",  "Invalid response format")
                 return
             }
-            if let balance = temp["balance"] as? String {
-                onCompleted?(state, balance)
+            if let state = temp["state"] as? Bool, state,
+               let balance = temp["balance"] as? String
+            {
+                onCompleted?(state,  balance, "")
+            } else if let error = temp["error"] as? String {
+                onCompleted?(false, "",  error)
+            } else {
+                onCompleted?(false, "",  "Unknown response format")
             }
         }
     }
-
     public func getSPLTokenBalance(address: String,
                                    SPLTokenAddress: String = SPLToken.USDT.rawValue,
                                    decimalPoints: Double = 6.0,
                                    endpoint: String = SolanaMainNet,
-                                   onCompleted: ((Bool, String) -> Void)? = nil)
+                                   onCompleted: ((Bool,String, String) -> Void)? = nil)
     {
         let params: [String: Any] = ["address": address,
                                      "endpoint": endpoint,
@@ -97,34 +102,38 @@ public class SolanaWeb: NSObject {
                                      "decimalPoints": decimalPoints]
         self.bridge.call(handlerName: "getSPLTokenBalance", data: params) { response in
             if self.showLog { print("response = \(String(describing: response))") }
-            guard let temp = response as? [String: Any], let state = temp["result"] as? Bool else {
-                onCompleted?(false, "error")
+            guard let temp = response as? [String: Any] else {
+                onCompleted?(false, "",  "Invalid response format")
                 return
             }
-            if let balance = temp["balance"] as? String {
-                onCompleted?(state, balance)
+            if let state = temp["state"] as? Bool, state,
+               let balance = temp["balance"] as? String
+            {
+                onCompleted?(state,  balance, "")
+            } else if let error = temp["error"] as? String {
+                onCompleted?(false, "",  error)
+            } else {
+                onCompleted?(false, "",  "Unknown response format")
             }
         }
     }
 
-    private func getArrayFromJSONString(jsonString: String) -> [[String: Any]] {
-        let jsonData = jsonString.data(using: .utf8)!
-        guard let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers) as? [[String: Any]] else { return [[String: Any]]() }
-        return array
-    }
-
-    public func getTokenAccountsByOwner(address: String, endpoint: String = SolanaMainNet, onCompleted: ((Bool, String, [[String: Any]]) -> Void)? = nil) {
+    public func getTokenAccountsByOwner(address: String, endpoint: String = SolanaMainNet, onCompleted: ((Bool, String,String) -> Void)? = nil) {
         let params: [String: String] = ["address": address, "endpoint": endpoint]
-        self.bridge.call(handlerName: "getTokenAccountsByOwner", data: params) { [weak self] response in
-            guard let self = self else { return }
+        self.bridge.call(handlerName: "getTokenAccountsByOwner", data: params) { response in
             if self.showLog { print("response = \(String(describing: response))") }
-            guard let temp = response as? [String: Any], let state = temp["result"] as? Bool else {
-                onCompleted?(false, "", [[String: Any]]())
+            guard let temp = response as? [String: Any] else {
+                onCompleted?(false, "",  "Invalid response format")
                 return
             }
-            if let tokenAccountsJson = temp["tokenAccounts"] as? String {
-                let tokenAccounts = self.getArrayFromJSONString(jsonString: tokenAccountsJson)
-                onCompleted?(state, tokenAccountsJson, tokenAccounts)
+            if let state = temp["state"] as? Bool, state,
+               let tokenAccounts = temp["tokenAccounts"] as? String
+            {
+                onCompleted?(state, tokenAccounts, "")
+            } else if let error = temp["error"] as? String {
+                onCompleted?(false, "",  error)
+            } else {
+                onCompleted?(false, "",  "Unknown response format")
             }
         }
     }
@@ -133,21 +142,28 @@ public class SolanaWeb: NSObject {
                                toAddress: String,
                                amount: String,
                                endpoint: String = SolanaMainNet,
-                               onCompleted: ((Bool, String) -> Void)? = nil)
+                               onCompleted: ((Bool, String,String) -> Void)? = nil)
     {
         let amount = Int64(doubleValue(string: amount) * pow(10, 9))
         let params: [String: Any] = ["toPublicKey": toAddress,
                                      "amount": amount,
                                      "endpoint": endpoint,
                                      "secretKey": privateKey]
-        self.bridge.call(handlerName: "solanaMainTransfer", data: params) {[weak self] response in
-            guard let self = self else { return }
+        self.bridge.call(handlerName: "solanaMainTransfer", data: params) { response in
             if self.showLog { print("response = \(String(describing: response))") }
-            guard let temp = response as? [String: Any], let state = temp["result"] as? Bool, let txid = temp["txid"] as? String else {
-                onCompleted?(false, "error")
+            guard let temp = response as? [String: Any] else {
+                onCompleted?(false, "", "Invalid response format")
                 return
             }
-            onCompleted?(state, txid)
+            if let state = temp["result"] as? Bool, state,
+               let txid = temp["txid"] as? String
+            {
+                onCompleted?(state, txid, "")
+            } else if let error = temp["error"] as? String {
+                onCompleted?(false,"", error)
+            } else {
+                onCompleted?(false, "","Unknown response format")
+            }
         }
     }
 
@@ -157,7 +173,7 @@ public class SolanaWeb: NSObject {
                                     amount: String,
                                     decimalPoints: Double = 6,
                                     endpoint: String = SolanaMainNet,
-                                    onCompleted: ((Bool, String) -> Void)? = nil)
+                                    onCompleted: ((Bool, String,String) -> Void)? = nil)
     {
         let number = Int64(doubleValue(string: amount) * pow(10, decimalPoints))
         let params: [String: Any] = ["mintAuthority": mintAuthority,
@@ -166,19 +182,26 @@ public class SolanaWeb: NSObject {
                                      "endpoint": endpoint,
                                      "decimals": decimalPoints,
                                      "secretKey": privateKey]
-        self.bridge.call(handlerName: "solanaTokenTransfer", data: params) { [weak self] response in
-            guard let self = self else { return }
+        self.bridge.call(handlerName: "solanaTokenTransfer", data: params) { response in
             if self.showLog { print("response = \(String(describing: response))") }
-            guard let temp = response as? [String: Any], let state = temp["result"] as? Bool, let txid = temp["txid"] as? String else {
-                onCompleted?(false, "error")
+            guard let temp = response as? [String: Any] else {
+                onCompleted?(false, "", "Invalid response format")
                 return
             }
-            onCompleted?(state, txid)
+            if let state = temp["result"] as? Bool, state,
+               let txid = temp["txid"] as? String
+            {
+                onCompleted?(state, txid, "")
+            } else if let error = temp["error"] as? String {
+                onCompleted?(false,"", error)
+            } else {
+                onCompleted?(false, "","Unknown response format")
+            }
         }
     }
 }
 
-extension SolanaWeb: WKNavigationDelegate {
+extension SolanaWeb3_V1: WKNavigationDelegate {
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         if self.showLog {
             print("WKWebView didFail---->")
@@ -210,7 +233,9 @@ extension SolanaWeb: WKNavigationDelegate {
             print("WKWebView didReceive  challenge---->")
         }
         if let trust = challenge.protectionSpace.serverTrust {
-            completionHandler(.useCredential, URLCredential(trust: trust))
+            DispatchQueue.global().async {
+                completionHandler(.useCredential, URLCredential(trust: trust))
+            }
         } else {
             completionHandler(.performDefaultHandling, nil)
         }
@@ -224,7 +249,7 @@ extension SolanaWeb: WKNavigationDelegate {
     }
 }
 
-extension SolanaWeb {
+extension SolanaWeb3_V1 {
     private func doubleValue(string: String) -> Double {
         let decima = NSDecimalNumber(string: string.count == 0 ? "0" : string)
         let doubleValue = Double(truncating: decima as NSNumber)
