@@ -12,7 +12,7 @@ For more specific usage, please refer to the [demo](https://github.com/Elizabet1
 ###  CocoaPods
 
 ```ruby
-pod 'SolanaWeb', '~> 1.0.4'
+pod 'SolanaWeb', '~> 1.0.5'
 ```
 
 ### Example usage
@@ -39,10 +39,15 @@ if solanaWeb.isGenerateSolanaWebInstanceSuccess {
 let privateKey = ""
 let toAddress = ""
 let amount = ""
-solanaWeb.solanaTransfer(privateKey: privateKey, toAddress: toAddress, amount: amount, endpoint: SolanaMainNet) { [weak self] state, txid in
+solanaWeb.solanaTransfer(privateKey: privateKey, toAddress: toAddress, amount: amount, endpoint: SolanaMainNet) { [weak self] state, txid, error in
     guard let self = self else { return }
     print("state = \(state)")
     print("txid = \(txid)")
+    if (state) {
+        self.hashLabel.text = txid
+     } else {
+        self.hashLabel.text = error
+     }
 } 
 ```
 ##### Send SPLToken
@@ -51,10 +56,15 @@ let privateKey = ""
 let toAddress = ""
 let tokenAddress = ""
 let amount = ""
-solanaWeb.solanaTokenTransfer(privateKey: privateKey, toAddress: toAddress, mintAuthority: tokenAddress, amount: amount, endpoint: SolanaMainNet) { [weak self] state, txid in
+solanaWeb.solanaTokenTransfer(privateKey: privateKey, toAddress: toAddress, mintAuthority: tokenAddress, amount: amount, endpoint: SolanaMainNet) { [weak self] state, txid, error in
     guard let self = self else { return }
     print("state = \(state)")
     print("txid = \(txid)")
+    if (state) {
+        self.hashLabel.text = txid
+     } else {
+        self.hashLabel.text = error
+     }
 }
 ```
 
