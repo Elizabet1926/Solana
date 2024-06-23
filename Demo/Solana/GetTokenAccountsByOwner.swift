@@ -54,6 +54,7 @@ class GetTokenAccountsByOwner: UIViewController {
     func setupView() {
         setupNav()
         setupContent()
+        showAlert()
     }
 
     func setupNav() {

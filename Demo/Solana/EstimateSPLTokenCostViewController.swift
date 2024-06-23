@@ -10,26 +10,19 @@ import SafariServices
 import SnapKit
 import UIKit
 import SolanaWeb
-let margin: CGFloat = 20.0
 
-enum TransferType: String, CaseIterable {
-    case sendSOL
-    case sendSPLToken
-}
-
-class TransferViewController: UIViewController {
-    var transferType: TransferType = .sendSOL
+class EstimateSPLTokenCostViewController: UIViewController {
     lazy var solanaWeb: SolanaWeb3_V1 = {
         let sw = SolanaWeb3_V1()
         return sw
     }()
-
-    lazy var transferBtn: UIButton = {
+    
+    lazy var estimatedBtn: UIButton = {
         let btn = UIButton(type: .custom)
-        btn.setTitle("transfer", for: .normal)
+        btn.setTitle("Estimate Cost", for: .normal)
         btn.setTitleColor(.white, for: .normal)
         btn.backgroundColor = .red
-        btn.addTarget(self, action: #selector(transferAction), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(estimatedAction), for: .touchUpInside)
         btn.layer.cornerRadius = 5
         btn.layer.masksToBounds = true
         return btn
@@ -48,13 +41,14 @@ class TransferViewController: UIViewController {
         let reviceAddressField = UITextField()
         reviceAddressField.borderStyle = .line
         reviceAddressField.placeholder = "revice address input"
-        reviceAddressField.text = "EgKvrWmdXZSddhW1NjfcN8nooVnr4xRLrXWyYbWJ8X93"
+        reviceAddressField.text = "Enx3p7cLUrt4CZeXNvc2hovjir51nN9yn1f81mwVkX7r"
         return reviceAddressField
     }()
     
     lazy var SPLTokenAddressTextField: UITextField = {
         let textField = UITextField()
         textField.borderStyle = .line
+        textField.text = SPLToken.USDT.rawValue
         textField.placeholder = "SPLToken address input"
         return textField
     }()
@@ -68,10 +62,10 @@ class TransferViewController: UIViewController {
         return amountTextField
     }()
     
-    lazy var hashLabel: UILabel = {
+    lazy var estimatedCostLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.text = "Signature..."
+        label.text = "Waiting for estimate ..."
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         label.textAlignment = .center
         label.textColor = .blue
@@ -81,17 +75,7 @@ class TransferViewController: UIViewController {
         return label
     }()
     
-    lazy var detailBtn: UIButton = {
-        let btn = UIButton(type: .custom)
-        btn.setTitle("Get detail in solscan.io", for: .normal)
-        btn.setTitleColor(.white, for: .normal)
-        btn.backgroundColor = .red
-        btn.addTarget(self, action: #selector(queryAction), for: .touchUpInside)
-        btn.layer.cornerRadius = 5
-        btn.layer.masksToBounds = true
-        return btn
-    }()
-   
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupContent()
@@ -104,25 +88,19 @@ class TransferViewController: UIViewController {
     }
     
     func setupContent() {
-        title = transferType.rawValue
+        title = "SPLToken Estimate Cost"
         view.backgroundColor = .white
-        view.addSubviews(transferBtn, privateKeyTextView, reviceAddressField, amountTextField, SPLTokenAddressTextField, hashLabel, detailBtn)
-        transferBtn.snp.makeConstraints { make in
+        view.addSubviews(estimatedBtn, privateKeyTextView, reviceAddressField, amountTextField, SPLTokenAddressTextField, estimatedCostLabel)
+        estimatedBtn.snp.makeConstraints { make in
             make.left.equalTo(margin)
             make.right.equalTo(-margin)
             make.bottom.equalTo(-100)
             make.height.equalTo(40)
         }
-        detailBtn.snp.makeConstraints { make in
+        estimatedCostLabel.snp.makeConstraints { make in
             make.left.equalTo(margin)
             make.right.equalTo(-margin)
-            make.bottom.equalTo(transferBtn.snp.top).offset(-20)
-            make.height.equalTo(40)
-        }
-        hashLabel.snp.makeConstraints { make in
-            make.left.equalTo(margin)
-            make.right.equalTo(-margin)
-            make.bottom.equalTo(detailBtn.snp.top).offset(-20)
+            make.bottom.equalTo(estimatedBtn.snp.top).offset(-20)
             make.height.equalTo(60)
         }
         privateKeyTextView.snp.makeConstraints { make in
@@ -152,78 +130,40 @@ class TransferViewController: UIViewController {
             make.top.equalTo(amountTextField.snp.bottom).offset(20)
             make.height.equalTo(44)
         }
-       
-        SPLTokenAddressTextField.isHidden = transferType == .sendSOL
-        SPLTokenAddressTextField.text = SPLToken.USDT.rawValue
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
     
-    @objc func transferAction() {
-        print("tap transfer")
+    @objc func estimatedAction() {
+        print("tap estimated")
         if solanaWeb.isGenerateSolanaWebInstanceSuccess {
-            transferType == .sendSOL ? sendSOL() : sendSPLToken()
+            estimatedSPLTokenTransferCost()
         } else {
             solanaWeb.setup(showLog: true) { [weak self] _ in
                 guard let self = self else { return }
-                self.transferType == .sendSOL ? self.sendSOL() : self.sendSPLToken()
-            }
-        }
-    }
-
-    func sendSOL() {
-        guard let privateKey = privateKeyTextView.text,
-              let toAddress = reviceAddressField.text,
-              let amount = amountTextField.text else { return }
-        solanaWeb.solanaTransfer(privateKey: privateKey,
-                                 toAddress: toAddress,
-                                 amount: amount,
-                                 endpoint: SolanaMainNet) { [weak self] state, txid,error in
-            guard let self = self else { return }
-            print("state = \(state)")
-            print("txid = \(txid)")
-            if (state) {
-                self.hashLabel.text = txid
-            } else {
-                self.hashLabel.text = error
+                self.estimatedSPLTokenTransferCost()
             }
         }
     }
     
-    func sendSPLToken() {
+    func estimatedSPLTokenTransferCost() {
         guard let privateKey = privateKeyTextView.text,
               let toAddress = reviceAddressField.text,
               let tokenAddress = SPLTokenAddressTextField.text,
               let amount = amountTextField.text else { return }
-        solanaWeb.solanaTokenTransfer(privateKey: privateKey,
-                                      toAddress: toAddress,
-                                      mintAuthority: tokenAddress,
-                                      amount: amount,
-                                      endpoint: SolanaMainNet) { [weak self] state, txid,error in
+        solanaWeb.estimatedSPLTokenTransferCost(privateKey: privateKey,
+                                                toAddress: toAddress,
+                                                mintAddress: tokenAddress,
+                                                amount: amount) { [weak self] state, cost,error in
             guard let self = self else { return }
-            print("state = \(state)")
-            print("txid = \(txid)")
             if (state) {
-                self.hashLabel.text = txid
+                self.estimatedCostLabel.text = "sendSPLToken estimated cost \(cost) SOL "
             } else {
-                self.hashLabel.text = error
+                self.estimatedCostLabel.text = error
             }
         }
     }
     
-    @objc func queryAction() {
-        guard let hash = hashLabel.text, hash.count > 10 else { return }
-        let urlString = "https://solscan.io/tx/" + hash
-        showSafariVC(for: urlString)
-    }
-}
-
-public extension UIView {
-    func addSubviews(_ subviews: UIView...) {
-        for index in subviews {
-            addSubview(index)
-        }
-    }
 }

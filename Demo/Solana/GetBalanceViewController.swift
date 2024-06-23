@@ -56,6 +56,7 @@ class GetBalanceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        showAlert()
     }
 
     deinit {
@@ -104,7 +105,7 @@ class GetBalanceViewController: UIViewController {
     }
 
     func getSOLBalance(_ address: String) {
-        solanaWeb.getSOLBalance(address: address) { [weak self] state, balance,error in
+        solanaWeb.getSOLBalance(address: address,endpoint: SolanaMainNet) { [weak self] state, balance,error in
             guard let self = self else { return }
             self.getBalanceBtn.isEnabled = true
             if state {
@@ -117,7 +118,7 @@ class GetBalanceViewController: UIViewController {
     }
 
     func getSPLTokenBalance(_ address: String, _ splTokenAddress: String) {
-        solanaWeb.getSPLTokenBalance(address: address, SPLTokenAddress: splTokenAddress) { [weak self] state, balance,error in
+        solanaWeb.getSPLTokenBalance(address: address, SPLTokenAddress: splTokenAddress,endpoint: SolanaMainNet) { [weak self] state, balance,error in
             guard let self = self else { return }
             self.getBalanceBtn.isEnabled = true
             if state {
