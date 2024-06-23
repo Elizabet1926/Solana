@@ -8,7 +8,7 @@
 import Foundation
 import WebKit
 
-public let SolanaMainNet: String = "https://api.metaplex.solana.com"
+public let SolanaMainNet: String = "https://methodical-small-fire.solana-mainnet.quiknode.pro/cd15a67501b37dd206c3e42bd992b9175cfe539d/"
 public let SolanaMainNet1: String = "https://solana.maiziqianbao.net"
 public let SolanaMainNet2: String = "https://api.mainnet-beta.solana.com"
 public let SolanaMainNet3: String = "https://solana-api.projectserum.com"
@@ -137,7 +137,8 @@ public class SolanaWeb3_V1: NSObject {
             }
         }
     }
-
+    
+    // MARK: solanaTransfer
     public func solanaTransfer(privateKey: String,
                                toAddress: String,
                                amount: String,
@@ -155,10 +156,10 @@ public class SolanaWeb3_V1: NSObject {
                 onCompleted?(false, "", "Invalid response format")
                 return
             }
-            if let state = temp["result"] as? Bool, state,
-               let txid = temp["txid"] as? String
+            if let state = temp["state"] as? Bool, state,
+               let signature = temp["signature"] as? String
             {
-                onCompleted?(state, txid, "")
+                onCompleted?(state, signature, "")
             } else if let error = temp["error"] as? String {
                 onCompleted?(false,"", error)
             } else {
@@ -166,7 +167,38 @@ public class SolanaWeb3_V1: NSObject {
             }
         }
     }
-
+    
+    // MARK: estimatedSOLTransferCost
+    public func estimatedSOLTransferCost(fromAddress: String,
+                               toAddress: String,
+                               amount: String,
+                               endpoint: String = SolanaMainNet,
+                               onCompleted: ((Bool, String,String) -> Void)? = nil)
+    {
+        let amount = Int64(doubleValue(string: amount) * pow(10, 9))
+        let params: [String: Any] = ["toPublicKey": toAddress,
+                                     "fromPublicKey": fromAddress,
+                                     "amount": amount,
+                                     "endpoint": endpoint]
+        self.bridge.call(handlerName: "estimatedSOLTransferCost", data: params) { response in
+            if self.showLog { print("response = \(String(describing: response))") }
+            guard let temp = response as? [String: Any] else {
+                onCompleted?(false, "", "Invalid response format")
+                return
+            }
+            if let state = temp["state"] as? Bool, state,
+               let estimatedSOLTransferCost = temp["estimatedSOLTransferCost"] as? String
+            {
+                onCompleted?(state, estimatedSOLTransferCost, "")
+            } else if let error = temp["error"] as? String {
+                onCompleted?(false,"", error)
+            } else {
+                onCompleted?(false, "","Unknown response format")
+            }
+        }
+    }
+    
+    // MARK: solanaTokenTransfer
     public func solanaTokenTransfer(privateKey: String,
                                     toAddress: String,
                                     mintAuthority: String = SPLToken.USDT.rawValue,
@@ -188,14 +220,117 @@ public class SolanaWeb3_V1: NSObject {
                 onCompleted?(false, "", "Invalid response format")
                 return
             }
-            if let state = temp["result"] as? Bool, state,
-               let txid = temp["txid"] as? String
+            if let state = temp["state"] as? Bool, state,
+               let signature = temp["signature"] as? String
             {
-                onCompleted?(state, txid, "")
+                onCompleted?(state, signature, "")
             } else if let error = temp["error"] as? String {
                 onCompleted?(false,"", error)
             } else {
                 onCompleted?(false, "","Unknown response format")
+            }
+        }
+    }
+    // MARK: estimatedSPLTokenTransferCost
+    public func estimatedSPLTokenTransferCost(privateKey: String,
+                               toAddress: String,
+                               mintAddress: String,
+                               decimalPoints: Double = 6,
+                               amount: String,
+                               endpoint: String = SolanaMainNet,
+                               onCompleted: ((Bool, String,String) -> Void)? = nil)
+    {
+        let amount = Int64(doubleValue(string: amount) * pow(10, decimalPoints))
+        let params: [String: Any] = ["toPublicKey": toAddress,
+                                     "privateKey": privateKey,
+                                     "mint": mintAddress,
+                                     "amount": amount,
+                                     "endpoint": endpoint]
+        self.bridge.call(handlerName: "estimatedSPLTokenTransferCost", data: params) { response in
+            if self.showLog { print("response = \(String(describing: response))") }
+            guard let temp = response as? [String: Any] else {
+                onCompleted?(false, "", "Invalid response format")
+                return
+            }
+            if let state = temp["state"] as? Bool, state,
+               let cost = temp["cost"] as? String
+            {
+                onCompleted?(state, cost, "")
+            } else if let error = temp["error"] as? String {
+                onCompleted?(false,"", error)
+            } else {
+                onCompleted?(false, "","Unknown response format")
+            }
+        }
+    }
+    
+    // MARK: createWallet
+    public func createWallet(onCompleted: ((Bool, String, String, String, String) -> Void)? = nil) {
+        let params = [String: String]()
+        self.bridge.call(handlerName: "createWallet", data: params) { response in
+            if self.showLog { print("response = \(String(describing: response))") }
+
+            guard let temp = response as? [String: Any] else {
+                onCompleted?(false, "", "",  "", "Invalid response format")
+                return
+            }
+
+            if let state = temp["state"] as? Bool, state,
+               let privateKey = temp["privateKey"] as? String,
+               let address = temp["publicKey"] as? String,
+               let mnemonic = temp["mnemonic"] as? String
+            {
+                onCompleted?(state, address, privateKey, mnemonic, "")
+            } else if let error = temp["error"] as? String {
+                onCompleted?(false, "", "","", error)
+            } else {
+                onCompleted?(false, "", "", "", "Unknown response format")
+            }
+        }
+    }
+    
+    // MARK: importAccountFromMnemonic
+    public func importAccountFromMnemonic(mnemonic:String,onCompleted: ((Bool, String, String, String, String) -> Void)? = nil) {
+        let params = ["mnemonic": mnemonic]
+        self.bridge.call(handlerName: "importAccountFromMnemonic", data: params) { response in
+            if self.showLog { print("response = \(String(describing: response))") }
+
+            guard let temp = response as? [String: Any] else {
+                onCompleted?(false, "", "",  "", "Invalid response format")
+                return
+            }
+
+            if let state = temp["state"] as? Bool, state,
+               let privateKey = temp["privateKey"] as? String,
+               let address = temp["publicKey"] as? String,
+               let mnemonic = temp["mnemonic"] as? String
+            {
+                onCompleted?(state, address, privateKey, mnemonic, "")
+            } else if let error = temp["error"] as? String {
+                onCompleted?(false, "", "","", error)
+            } else {
+                onCompleted?(false, "", "", "", "Unknown response format")
+            }
+        }
+    }
+    // MARK: importAccountFromPrivateKey
+    public func importAccountFromPrivateKey(privateKey:String,onCompleted: ((Bool, String, String, String) -> Void)? = nil) {
+        let params = ["privateKey": privateKey]
+        self.bridge.call(handlerName: "importAccountFromPrivateKey", data: params) { response in
+            if self.showLog { print("response = \(String(describing: response))") }
+            guard let temp = response as? [String: Any] else {
+                onCompleted?(false, "", "", "Invalid response format")
+                return
+            }
+            if let state = temp["state"] as? Bool, state,
+               let privateKey = temp["privateKey"] as? String,
+               let address = temp["publicKey"] as? String
+            {
+                onCompleted?(state, address, privateKey, "")
+            } else if let error = temp["error"] as? String {
+                onCompleted?(false, "", "", error)
+            } else {
+                onCompleted?(false, "", "","Unknown response format")
             }
         }
     }
