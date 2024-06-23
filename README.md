@@ -12,7 +12,7 @@ For more specific usage, please refer to the [demo](https://github.com/Elizabet1
 ###  CocoaPods
 
 ```ruby
-pod 'SolanaWeb', '~> 1.0.5'
+pod 'SolanaWeb', '~> 1.0.6'
 ```
 
 ### Example usage
@@ -34,6 +34,80 @@ if solanaWeb.isGenerateSolanaWebInstanceSuccess {
 }
 ```
 
+##### Create Wallet
+```swift
+solanaWeb.createWallet() { [weak self] state, address, privateKey, mnemonic,error in
+    guard let self = self else { return }
+    self.createWalletBtn.isEnabled = true
+    tipLabel.text = "create finished."
+    if state {
+        let text =
+            "address: " + address + "\n\n" +
+            "mnemonic: " + mnemonic + "\n\n" +
+            "privateKey: " + privateKey
+        walletDetailTextView.text = text
+    } else {
+        walletDetailTextView.text = error
+    }
+}
+```
+
+##### Import Account From Mnemonic
+```swift
+guard let mnemonic = mnemonicTextView.text else{return}
+solanaWeb.importAccountFromMnemonic (mnemonic: mnemonic){ [weak self] state, address, privateKey, publicKey, error in
+    guard let self = self else { return }
+    self.importAccountFromMnemonicBtn.isEnabled = true
+    tipLabel.text = "import finished."
+    if state {
+        let text =
+            "address: " + address + "\n\n" +
+            "privateKey: " + privateKey + "\n\n" +
+            "publicKey: " + publicKey
+        walletDetailTextView.text = text
+    } else {
+        walletDetailTextView.text = error
+    }
+}
+```
+##### Import Account From PrivateKey
+```swift
+guard let privateKey = privateKeyTextView.text else{return}
+solanaWeb.importAccountFromPrivateKey(privateKey: privateKey){ [weak self] state, address, privateKey,error in
+    guard let self = self else { return }
+    self.importAccountFromPrivateKeyBtn.isEnabled = true
+    tipLabel.text = "import finished."
+    if state {
+        let text =
+            "address: " + address + "\n\n" +
+            "privateKey: " + privateKey
+        walletDetailTextView.text = text
+    } else {
+        walletDetailTextView.text = error
+    }
+}
+```
+
+##### Estimate Cost with Send SOL
+```swift
+guard let sendAddress = sendAddressTextView.text,
+          let toAddress = reviceAddressField.text,
+          let amount = amountTextField.text else { return }
+    print("Estimate Cost start.")
+    solanaWeb.estimatedSOLTransferCost(fromAddress: sendAddress,
+                                       toAddress: toAddress,
+                                       amount: amount,
+                                       endpoint: SolanaMainNet) { [weak self] state, estimatedSOLTransferCost,error in
+        guard let self = self else { return }
+        print("Estimate Cost finised.")
+        if (state) {
+            self.estimatedCostLabel.text = "send SOL estimated cost \(estimatedSOLTransferCost) SOL "
+        } else {
+            self.estimatedCostLabel.text = error
+        }
+    }
+```
+
 ##### Send SOL
 ```swift
 let privateKey = ""
@@ -49,6 +123,25 @@ solanaWeb.solanaTransfer(privateKey: privateKey, toAddress: toAddress, amount: a
         self.hashLabel.text = error
      }
 } 
+```
+
+##### Estimate Cost with Send SPLToken
+```swift
+guard let privateKey = privateKeyTextView.text,
+      let toAddress = reviceAddressField.text,
+      let tokenAddress = SPLTokenAddressTextField.text,
+      let amount = amountTextField.text else { return }
+      solanaWeb.estimatedSPLTokenTransferCost(privateKey: privateKey,
+                                                toAddress: toAddress,
+                                                mintAddress: tokenAddress,
+                                                amount: amount) { [weak self] state, cost,error in
+            guard let self = self else { return }
+            if (state) {
+                self.estimatedCostLabel.text = "sendSPLToken estimated cost \(cost) SOL "
+            } else {
+                self.estimatedCostLabel.text = error
+            }
+        }
 ```
 ##### Send SPLToken
 ```swift
