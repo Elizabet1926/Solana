@@ -8,6 +8,6 @@ target 'Solana' do
 
   # Pods for Solana
   pod 'SnapKit', '~> 5.6.0'
-  pod 'SolanaWeb', '~> 1.0.6'
+#  pod 'SolanaWeb', '~> 1.0.6'
 
 end

@@ -22,6 +22,7 @@
 		EF959AAA28D3379700229626 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF959AA928D3379700229626 /* Assets.xcassets */; };
 		EF959AAD28D3379700229626 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF959AAB28D3379700229626 /* LaunchScreen.storyboard */; };
 		EFC73DD828D4613F00B0B732 /* TransferViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFC73DD728D4613F00B0B732 /* TransferViewController.swift */; };
+		EFCE369E2C2F085C001755DD /* SolanaWeb in Frameworks */ = {isa = PBXBuildFile; productRef = EFCE369D2C2F085C001755DD /* SolanaWeb */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E6BAA7BD57C884101AE143E /* Pods_Solana.framework in Frameworks */,
+				EFCE369E2C2F085C001755DD /* SolanaWeb in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +135,9 @@
 			dependencies = (
 			);
 			name = Solana;
+			packageProductDependencies = (
+				EFCE369D2C2F085C001755DD /* SolanaWeb */,
+			);
 			productName = Solana;
 			productReference = EF959A9D28D3379300229626 /* Solana.app */;
 			productType = "com.apple.product-type.application";
@@ -161,6 +166,9 @@
 				Base,
 			);
 			mainGroup = EF959A9428D3379300229626;
+			packageReferences = (
+				EFCE369C2C2F085C001755DD /* XCRemoteSwiftPackageReference "Solana" */,
+			);
 			productRefGroup = EF959A9E28D3379300229626 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -463,6 +471,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EFCE369C2C2F085C001755DD /* XCRemoteSwiftPackageReference "Solana" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Elizabet1926/Solana.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.7;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EFCE369D2C2F085C001755DD /* SolanaWeb */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFCE369C2C2F085C001755DD /* XCRemoteSwiftPackageReference "Solana" */;
+			productName = SolanaWeb;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EF959A9528D3379300229626 /* Project object */;
 }
