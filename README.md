@@ -3,7 +3,8 @@
 
 ![language](https://img.shields.io/badge/Language-Swift-green)
 [![Support](https://img.shields.io/badge/support-iOS%209%2B%20-FB7DEC.svg?style=flat)](https://www.apple.com/nl/ios/)&nbsp;
-[![CocoaPods](https://img.shields.io/badge/support-Cocoapods-green)](https://www.swift.org/getting-started/#using-the-package-manager)
+[![CocoaPods](https://img.shields.io/badge/support-Cocoapods-green)](https://cocoapods.org/pods/SolanaWeb)
+[![CocoaPods](https://img.shields.io/badge/support-SwiftPackageManagr-green)](https://www.swift.org/getting-started/#using-the-package-manager)
 
 ![](Resource/Demo01.png)
 
