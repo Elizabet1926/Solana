@@ -15,6 +15,14 @@ For more specific usage, please refer to the [demo](https://github.com/Elizabet1
 pod 'SolanaWeb', '~> 1.0.6'
 ```
 
+### Swift Package Manager
+
+```ruby
+dependencies: [
+    .package(url: "https://github.com/Elizabet1926/Solana.git", .upToNextMajor(from: "1.0.7"))
+]
+```
+
 ### Example usage
 
 ```swift
