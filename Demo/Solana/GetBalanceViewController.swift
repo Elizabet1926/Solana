@@ -105,7 +105,7 @@ class GetBalanceViewController: UIViewController {
     }
 
     func getSOLBalance(_ address: String) {
-        solanaWeb.getSOLBalance(address: address,endpoint: SolanaMainNet) { [weak self] state, balance,error in
+        solanaWeb.getSOLBalance(address: address,endpoint: SolanaMainNet1) { [weak self] state, balance,error in
             guard let self = self else { return }
             self.getBalanceBtn.isEnabled = true
             if state {
