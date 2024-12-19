@@ -118,7 +118,7 @@ class GetBalanceViewController: UIViewController {
     }
 
     func getSPLTokenBalance(_ address: String, _ splTokenAddress: String) {
-        solanaWeb.getSPLTokenBalance(address: address, SPLTokenAddress: splTokenAddress,endpoint: SolanaMainNet) { [weak self] state, balance,error in
+        solanaWeb.getSPLTokenBalance(address: address, SPLTokenAddress: splTokenAddress,endpoint: SolanaMainNet1) { [weak self] state, balance,error in
             guard let self = self else { return }
             self.getBalanceBtn.isEnabled = true
             if state {

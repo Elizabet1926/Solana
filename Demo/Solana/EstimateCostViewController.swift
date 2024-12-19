@@ -136,10 +136,13 @@ class EstimateCostViewController: UIViewController {
               let toAddress = reviceAddressField.text,
               let amount = amountTextField.text else { return }
         print("Estimate Cost start.")
+        
+        let endpoint = "https://alien-fittest-haze.solana-mainnet.quiknode.pro/87fb9d7adda782d599700eed95dbb6f25ea24f83"
+        // SolanaMainNet
         solanaWeb.estimatedSOLTransferCost(fromAddress: sendAddress,
                                            toAddress: toAddress,
                                            amount: amount,
-                                           endpoint: SolanaMainNet) { [weak self] state, estimatedSOLTransferCost,error in
+                                           endpoint: endpoint) { [weak self] state, estimatedSOLTransferCost,error in
             guard let self = self else { return }
             print("Estimate Cost finised.")
             if (state) {

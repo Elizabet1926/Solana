@@ -156,7 +156,8 @@ class EstimateSPLTokenCostViewController: UIViewController {
         solanaWeb.estimatedSPLTokenTransferCost(privateKey: privateKey,
                                                 toAddress: toAddress,
                                                 mintAddress: tokenAddress,
-                                                amount: amount) { [weak self] state, cost,error in
+                                                amount: amount,
+                                                endpoint: SolanaMainNet1) { [weak self] state, cost,error in
             guard let self = self else { return }
             if (state) {
                 self.estimatedCostLabel.text = "sendSPLToken estimated cost \(cost) SOL "

@@ -180,7 +180,7 @@ class TransferViewController: UIViewController {
         solanaWeb.solanaTransfer(privateKey: privateKey,
                                  toAddress: toAddress,
                                  amount: amount,
-                                 endpoint: SolanaMainNet) { [weak self] state, txid,error in
+                                 endpoint: SolanaMainNet1) { [weak self] state, txid,error in
             guard let self = self else { return }
             print("state = \(state)")
             print("txid = \(txid)")
@@ -201,7 +201,7 @@ class TransferViewController: UIViewController {
                                       toAddress: toAddress,
                                       mintAuthority: tokenAddress,
                                       amount: amount,
-                                      endpoint: SolanaMainNet) { [weak self] state, txid,error in
+                                      endpoint: SolanaMainNet1) { [weak self] state, txid,error in
             guard let self = self else { return }
             print("state = \(state)")
             print("txid = \(txid)")

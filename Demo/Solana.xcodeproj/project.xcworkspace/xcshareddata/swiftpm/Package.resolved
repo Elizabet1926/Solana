@@ -1,0 +1,15 @@
+{
+  "originHash" : "2c53b16ae00d91455ca97c0da39f96df919c904c83b457161fadaa6e5652870d",
+  "pins" : [
+    {
+      "identity" : "solana",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Elizabet1926/Solana.git",
+      "state" : {
+        "revision" : "4475c8a52aa4039d402f852922fdedd2e852c282",
+        "version" : "1.0.7"
+      }
+    }
+  ],
+  "version" : 3
+}
