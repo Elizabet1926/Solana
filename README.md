@@ -15,7 +15,13 @@ For more specific usage, please refer to the [demo](https://github.com/Elizabet1
 ```ruby
 pod 'SolanaWeb', '~> 1.0.6'
 ```
+### Highly Important Forward Guidance
 
+```
+I used the node "https://solana.maiziqianbao.net/" to test SOL transfers, SPL Token transfers, and other features,
+all of which were successful. However, SPL Token transfers using this node are relatively slow, taking about 20 seconds. 
+Therefore, I recommend purchasing nodes from https://www.quicknode.com/.
+```
 ### Swift Package Manager
 
 ```ruby
@@ -23,6 +29,7 @@ dependencies: [
     .package(url: "https://github.com/Elizabet1926/Solana.git", .upToNextMajor(from: "1.0.7"))
 ]
 ```
+
 
 ### Example usage
 
