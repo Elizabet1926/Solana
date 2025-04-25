@@ -180,5 +180,5 @@ solanaWeb.solanaTokenTransfer(privateKey: privateKey, toAddress: toAddress, mint
 For more specific usage, please refer to the [demo](https://github.com/Elizabet1926/Solana/tree/master/Demo)
 
 ## License
-
+ 
 SolanaWeb is released under the MIT license. [See LICENSE](https://github.com/Elizabet1926/Solana/blob/master/LICENSE) for details.
