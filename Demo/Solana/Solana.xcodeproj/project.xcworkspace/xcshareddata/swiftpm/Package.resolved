@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Elizabet1926/Solana.git",
       "state" : {
-        "revision" : "247b57d74076ed844df81b756cd62c03f4cf610c",
-        "version" : "1.0.9"
+        "revision" : "a4f65c11c5ac44c42851ef63869f18febf9db90d",
+        "version" : "1.1.0"
       }
     }
   ],

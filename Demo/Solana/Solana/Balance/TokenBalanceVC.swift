@@ -5,7 +5,7 @@
 
 import UIKit
 import SnapKit
-
+import SolanaWeb
 final class TokenBalanceVC: UIViewController {
 
     private let solanaWeb = SolanaWeb()

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		047123DF2F42DDCF007D4D5B /* SolanaWeb in Frameworks */ = {isa = PBXBuildFile; productRef = 047123DE2F42DDCF007D4D5B /* SolanaWeb */; };
+		047124202F42DEB7007D4D5B /* SolanaWeb in Frameworks */ = {isa = PBXBuildFile; productRef = 0471241F2F42DEB7007D4D5B /* SolanaWeb */; };
 		04A076922F3E24AC00EF9093 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 04A076912F3E24AC00EF9093 /* SnapKit */; };
 /* End PBXBuildFile section */
 
@@ -42,7 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04A076922F3E24AC00EF9093 /* SnapKit in Frameworks */,
-				047123DF2F42DDCF007D4D5B /* SolanaWeb in Frameworks */,
+				047124202F42DEB7007D4D5B /* SolanaWeb in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,7 +86,7 @@
 			name = Solana;
 			packageProductDependencies = (
 				04A076912F3E24AC00EF9093 /* SnapKit */,
-				047123DE2F42DDCF007D4D5B /* SolanaWeb */,
+				0471241F2F42DEB7007D4D5B /* SolanaWeb */,
 			);
 			productName = Solana;
 			productReference = 04A075A72F3E160300EF9093 /* Solana.app */;
@@ -118,7 +118,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				04A076902F3E24AC00EF9093 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				047123DD2F42DDCF007D4D5B /* XCRemoteSwiftPackageReference "Solana" */,
+				0471241E2F42DEB7007D4D5B /* XCRemoteSwiftPackageReference "Solana" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 04A075A82F3E160300EF9093 /* Products */;
@@ -348,12 +348,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		047123DD2F42DDCF007D4D5B /* XCRemoteSwiftPackageReference "Solana" */ = {
+		0471241E2F42DEB7007D4D5B /* XCRemoteSwiftPackageReference "Solana" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Elizabet1926/Solana.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.9;
+				minimumVersion = 1.1.0;
 			};
 		};
 		04A076902F3E24AC00EF9093 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -367,9 +367,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		047123DE2F42DDCF007D4D5B /* SolanaWeb */ = {
+		0471241F2F42DEB7007D4D5B /* SolanaWeb */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 047123DD2F42DDCF007D4D5B /* XCRemoteSwiftPackageReference "Solana" */;
+			package = 0471241E2F42DEB7007D4D5B /* XCRemoteSwiftPackageReference "Solana" */;
 			productName = SolanaWeb;
 		};
 		04A076912F3E24AC00EF9093 /* SnapKit */ = {
