@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multisig Flow Guide</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 16px;
+            background: #f2f2f7;
+            color: #1c1c1e;
+            line-height: 1.5;
+            font-size: 15px;
+        }
+        @media (prefers-color-scheme: dark) {
+            body { background: #1c1c1e; color: #f2f2f7; }
+            h1, h2 { color: #fff; }
+            .card { background: #2c2c2e; }
+            a { color: #64d2ff; }
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+        h2 {
+            font-size: 1.15rem;
+            margin-top: 24px;
+            margin-bottom: 8px;
+            color: #0a84ff;
+        }
+        .subtitle {
+            color: #8e8e93;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        ol, ul { margin: 8px 0; padding-left: 24px; }
+        li { margin-bottom: 6px; }
+        .step-num {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            background: #0a84ff;
+            color: #fff;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            border-radius: 0 8px 8px 0;
+            margin: 12px 0;
+        }
+        @media (prefers-color-scheme: dark) {
+            .warning { background: #3d3500; border-left-color: #ffd60a; }
+        }
+        .tip {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 12px;
+            border-radius: 0 8px 8px 0;
+            margin: 12px 0;
+        }
+        @media (prefers-color-scheme: dark) {
+            .tip { background: #1b2e1b; border-left-color: #30d158; }
+        }
+        code {
+            background: rgba(0,0,0,0.06);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        @media (prefers-color-scheme: dark) {
+            code { background: rgba(255,255,255,0.12); }
+        }
+        .flow {
+            font-weight: 600;
+            color: #0a84ff;
+            margin: 16px 0 8px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Multisig Flow Guide</h1>
+<p class="subtitle">SOL & SPL Token multi-signature transfer in 5 steps</p>
+
+<div class="card">
+    <p><strong>Overview</strong></p>
+    <p>A multisig transfer requires: create the multisig once → fund the vault → then for each transfer: create a proposal → activate it → collect enough approvals → execute. Below is the order and what each step does.</p>
+</div>
+
+<div class="card">
+    <p><strong>Devnet: Getting SOL (Faucet)</strong></p>
+    <p>For testing, use <strong>Devnet</strong>. Set your RPC to <code>https://api.devnet.solana.com</code> in RPC Config, then get free SOL from the official faucet:</p>
+    <p><strong>Devnet faucet:</strong> <a href="https://faucet.solana.com/" target="_blank" rel="noopener">https://faucet.solana.com/</a></p>
+    <p>Request 1–5 SOL (rate limits apply; signing in with GitHub may increase limits). You need SOL in the vault (vaultPda) before any multisig SOL or SPL transfer.</p>
+</div>
+
+<div class="card">
+    <p><strong>Getting Devnet SPL Tokens</strong></p>
+    <p>Devnet has no official USDC/USDT. The recommended way to get test SPL tokens is to <strong>create your own token</strong> on your machine using <strong>Solana CLI</strong> and <strong>spl-token</strong>.</p>
+    <ol>
+        <li><strong>Install Solana CLI</strong> (includes <code>solana</code>, <code>solana-keygen</code>, <code>solana config</code>).<br>
+            macOS/Linux: <code>sh -c "$(curl -sSfL https://release.solana.com/stable/install)"</code> then restart your terminal; or <code>brew install solana</code>.<br>
+            Windows: use the installer from <a href="https://github.com/solana-labs/solana/releases" target="_blank" rel="noopener">Solana releases</a> or WSL.</li>
+        <li><strong>Install spl-token CLI:</strong> <code>cargo install spl-token-cli</code> (requires <a href="https://rustup.rs/" target="_blank" rel="noopener">Rust</a>). Verify with <code>spl-token --version</code>.</li>
+        <li><strong>Point to Devnet:</strong> <code>solana config set --url https://api.devnet.solana.com</code></li>
+        <li><strong>Fund your wallet</strong> with SOL from the faucet above so you can pay for creation and minting.</li>
+        <li><strong>Create a new SPL token:</strong> <code>spl-token create-token</code> — this prints the <strong>Token Mint</strong> address. Save it; you use this mint in the app for SPL balance and transfers.</li>
+        <li><strong>Create a token account</strong> for your wallet (if needed): <code>spl-token create-account &lt;MINT&gt;</code></li>
+        <li><strong>Mint supply to yourself:</strong> <code>spl-token mint &lt;MINT&gt; &lt;AMOUNT&gt;</code></li>
+    </ol>
+    <p>You can use the default keypair (<code>~/.config/solana/id.json</code>, create with <code>solana keygen new</code>) or set a specific keypair: <code>solana config set --keypair /path/to/your-keypair.json</code>. The same mint address can be used in this app’s SPL Token Balance and Send SPL Token (use Devnet RPC).</p>
+</div>
+
+<p class="flow">Flow: Create Multisig → Fund vaultPda → Create Proposal → Activate → Approve (until threshold) → Execute</p>
+
+<h2><span class="step-num">1</span> Create Multisig</h2>
+<div class="card">
+    <p>You define members (public keys), threshold (e.g. 2 of 3), and optionally a name. The app creates the multisig on-chain and returns:</p>
+    <ul>
+        <li><strong>multisigPda</strong> — The multisig account address. Use this in every later step (Create Proposal, Activate, Approve, Execute).</li>
+        <li><strong>vaultPda</strong> — The treasury address. All SOL/SPL sent out by the multisig comes from here. You must fund it before any transfer.</li>
+        <li><strong>createKey</strong> / <strong>createKeyPrivateKey</strong> — Used only at creation to derive multisigPda. Save the private key for recovery; you don’t need it again in the app.</li>
+        <li><strong>signature</strong> — The on-chain transaction signature of the create transaction.</li>
+    </ul>
+    <div class="warning">
+        <strong>Important:</strong> After creating, send SOL to <strong>vaultPda</strong> (using any wallet or this app’s Send SOL). Without a funded vault, SOL transfer proposals will fail at execution.
+    </div>
+    <div class="warning">
+        <strong>Mainnet:</strong> The <strong>creator</strong> and <strong>every member address</strong> must have some SOL on mainnet (e.g. ≥0.001–0.005 SOL each). If any of these addresses has zero balance, execution will fail with “insufficient funds for rent”.
+    </div>
+</div>
+
+<h2><span class="step-num">2</span> Create Proposal</h2>
+<div class="card">
+    <p><strong>SOL transfer:</strong> Enter multisigPda, creator private key, recipient address, and amount (SOL). The proposal is created in <strong>Draft</strong> state.</p>
+    <p><strong>SPL Token transfer:</strong> Enter multisigPda, creator key, token mint, recipient, amount, decimals, and whether to create the recipient’s token account if missing.</p>
+    <p>Result includes <strong>transactionIndex</strong>. You will use this same index in Activate, Approve, and Execute.</p>
+    <div class="tip">
+        Ensure the multisig <strong>vault (vaultPda)</strong> already has enough SOL (for SOL transfers) or enough of the SPL token (for token transfers) before creating or executing the proposal.
+    </div>
+</div>
+
+<div class="card">
+    <p><strong>SPL: What is ATA? When to check «Create recipient ATA if missing»</strong></p>
+    <p><strong>ATA</strong> = <strong>Associated Token Account</strong>. On Solana, each wallet can hold a given SPL token in one dedicated account per token (per mint). That account is the ATA: it is derived from the wallet address and the token mint. The recipient must have an ATA for that token before they can receive it.</p>
+    <p><strong>When to <em>check</em> «Create recipient ATA if missing»:</strong></p>
+    <ul>
+        <li>The recipient has <strong>never</strong> held this token before (new address for this mint, or first time receiving this token).</li>
+        <li>You are not sure whether they already have an ATA for this mint — checking is safe as long as they don’t already have one.</li>
+    </ul>
+    <p><strong>When to <em>leave unchecked</em>:</strong></p>
+    <ul>
+        <li>The recipient has <strong>already received</strong> this token before (same mint). Their ATA already exists. If you check anyway, the proposal will include a “create ATA” instruction; at execution that will fail with <strong>«Account is already initialized»</strong> because the ATA is already there.</li>
+    </ul>
+    <p><strong>Rule of thumb:</strong> If you have successfully sent this token to this address before, do <strong>not</strong> check. Only check when the recipient is new to this token (no existing ATA for this mint).</p>
+</div>
+
+<h2><span class="step-num">3</span> Activate Proposal</h2>
+<div class="card">
+    <p>Moves the proposal from <strong>Draft</strong> to <strong>Active</strong> so members can vote. Any member can activate.</p>
+    <p>Enter: multisigPda, a member’s private key (the activator), and the <strong>transactionIndex</strong> from step 2.</p>
+    <p>After this, the proposal appears as Active; members can then Approve.</p>
+</div>
+
+<h2><span class="step-num">4</span> Approve Proposal</h2>
+<div class="card">
+    <p>Each approving member signs with their private key. You need <strong>threshold</strong> approvals (e.g. 2 of 3).</p>
+    <p>Enter: multisigPda, the approver’s private key, and the same <strong>transactionIndex</strong>.</p>
+    <p>Once the number of approvals reaches the threshold, the proposal is ready to execute.</p>
+</div>
+
+<h2><span class="step-num">5</span> Execute Transaction</h2>
+<div class="card">
+    <p>Runs the actual transfer on-chain (SOL or SPL from the vault to the recipient). Any member can trigger execute.</p>
+    <p>Enter: multisigPda, a member’s private key (executor), and the same <strong>transactionIndex</strong>. Optionally set vault index (default 0).</p>
+    <div class="warning">
+        Each proposal (same multisigPda + transactionIndex) can only be executed <strong>once</strong>. If you see “already initialized” or similar, the proposal was likely already executed — create a new proposal for another transfer.
+    </div>
+</div>
+
+<div class="card">
+    <p><strong>Quick checklist</strong></p>
+    <ul>
+        <li>Created multisig and saved <strong>multisigPda</strong> and <strong>vaultPda</strong>.</li>
+        <li>On mainnet: ensure the <strong>creator</strong> and <strong>every member address</strong> has some SOL (e.g. ≥0.001–0.005 SOL each).</li>
+        <li>Funded <strong>vaultPda</strong> with SOL (and SPL tokens if you do token transfers).</li>
+        <li>Create proposal → Activate → Approve until threshold → Execute, using the same <strong>transactionIndex</strong> for that proposal.</li>
+    </ul>
+</div>
+
+</body>
+</html>

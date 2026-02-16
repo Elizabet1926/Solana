@@ -2,19 +2,12 @@
 **SolanaWeb** is an iOS toolbelt for interaction with the Solana network.
 
 ![language](https://img.shields.io/badge/Language-Swift-green)
-[![Support](https://img.shields.io/badge/support-iOS%209%2B%20-FB7DEC.svg?style=flat)](https://www.apple.com/nl/ios/)&nbsp;
-[![CocoaPods](https://img.shields.io/badge/support-Cocoapods-green)](https://cocoapods.org/pods/SolanaWeb)
 [![CocoaPods](https://img.shields.io/badge/support-SwiftPackageManagr-green)](https://www.swift.org/getting-started/#using-the-package-manager)
 
 ![](Resource/Demo01.png)
 
 For more specific usage, please refer to the [demo](https://github.com/Elizabet1926/Solana/tree/master/Demo)
 
-###  CocoaPods
-
-```ruby
-pod 'SolanaWeb', '~> 1.0.6'
-```
 ### Highly Important Forward Guidance
 
 ```
@@ -26,7 +19,7 @@ Therefore, I recommend purchasing nodes from https://www.quicknode.com/.
 
 ```ruby
 dependencies: [
-    .package(url: "https://github.com/Elizabet1926/Solana.git", .upToNextMajor(from: "1.0.7"))
+    .package(url: "https://github.com/Elizabet1926/Solana.git", .upToNextMajor(from: "1.0.8"))
 ]
 ```
 
