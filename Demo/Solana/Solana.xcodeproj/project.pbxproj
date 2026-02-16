@@ -33,11 +33,6 @@
 			path = Solana;
 			sourceTree = "<group>";
 		};
-		04A075C12F3E182C00EF9093 /*  SolanaWeb */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = " SolanaWeb";
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +50,6 @@
 		04A0759E2F3E160300EF9093 = {
 			isa = PBXGroup;
 			children = (
-				04A075C12F3E182C00EF9093 /*  SolanaWeb */,
 				04A075A92F3E160300EF9093 /* Solana */,
 				04A075A82F3E160300EF9093 /* Products */,
 			);
@@ -86,7 +80,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				04A075A92F3E160300EF9093 /* Solana */,
-				04A075C12F3E182C00EF9093 /*  SolanaWeb */,
 			);
 			name = Solana;
 			packageProductDependencies = (
