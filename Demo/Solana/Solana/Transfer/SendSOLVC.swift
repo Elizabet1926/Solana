@@ -5,6 +5,7 @@
 
 import UIKit
 import SnapKit
+import SolanaWeb
 
 private let LAMPORTS_PER_SOL: UInt64 = 1_000_000_000
 

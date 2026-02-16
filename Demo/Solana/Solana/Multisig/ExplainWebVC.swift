@@ -6,7 +6,7 @@
 import UIKit
 import WebKit
 import SnapKit
-
+import SolanaWeb
 final class ExplainWebVC: UIViewController {
 
     private let webView = WKWebView()

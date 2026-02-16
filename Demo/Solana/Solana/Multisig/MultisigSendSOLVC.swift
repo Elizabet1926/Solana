@@ -5,6 +5,7 @@
 
 import UIKit
 import SnapKit
+import SolanaWeb
 
 final class MultisigSendSOLVC: UIViewController {
 

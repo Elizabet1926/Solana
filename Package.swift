@@ -5,6 +5,10 @@ import PackageDescription
 
 let package = Package(
     name: "SolanaWeb",
+     platforms: [
+        .macOS(.v10_15),  // 或更高，例如 .macOS(.v12)
+        .iOS(.v13)
+    ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
