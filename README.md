@@ -5,6 +5,9 @@
 ![language](https://img.shields.io/badge/Language-Swift-green)
 [![CocoaPods](https://img.shields.io/badge/support-Swift%20Package%20Manager-green)](https://www.swift.org/getting-started/#using-the-package-manager)
 
+![](Resource/Demo01.png)
+
+
 For full app examples, see the [Demo](https://github.com/Elizabet1926/Solana/tree/master/Demo) project.
 
 ---
